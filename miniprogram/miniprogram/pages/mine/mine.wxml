@@ -1,0 +1,54 @@
+<view class="page">
+  <view class="user-card">
+    <view class="avatar">{{avatarChar}}</view>
+    <view class="user-info" wx:if="{{user}}">
+      <view class="nickname">{{user.nickname}}</view>
+      <view class="phone">{{user.phone}}</view>
+    </view>
+    <van-loading wx:else size="24" color="#fff" />
+  </view>
+
+  <view class="identity-card card">
+    <view class="identity-info">
+      <view class="identity-label">当前身份</view>
+      <view class="identity-value">{{identityOptions[identityIndex].label}}</view>
+    </view>
+    <picker range="{{identityOptions}}" range-key="label" value="{{identityIndex}}" bindchange="onIdentityChange">
+      <view class="identity-switch">
+        <text>切换身份</text>
+        <van-icon name="arrow-down" size="28" color="#07c160" />
+      </view>
+    </picker>
+  </view>
+
+  <view class="wallet-card card" wx:if="{{identityIndex === 0}}">
+    <view class="wallet-item" wx:for="{{publisherWallet}}" wx:key="key">
+      <view class="wallet-num">{{item.value}}</view>
+      <view class="wallet-label">{{item.label}}</view>
+    </view>
+  </view>
+  <view class="wallet-card card" wx:else>
+    <view class="wallet-item" wx:for="{{runnerWallet}}" wx:key="key">
+      <view class="wallet-num">{{item.value}}</view>
+      <view class="wallet-label">{{item.label}}</view>
+    </view>
+  </view>
+  <view class="order-grid-card">
+    <view class="order-grid-title">我的订单</view>
+    <view class="order-grid">
+      <view class="order-item" wx:for="{{orderTabs}}" wx:key="key" data-tab="{{item.tab}}" bindtap="onOrderTabTap">
+        <view class="order-icon" style="background: {{item.bg}};">{{item.icon}}</view>
+        <view class="order-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="menu-group">
+    <view class="menu-item" wx:for="{{menus}}" wx:key="title" data-title="{{item.title}}" bindtap="onMenuTap">
+      <view class="menu-left">
+        <van-icon name="{{item.icon}}" size="36" color="#07c160" />
+        <text class="menu-title">{{item.title}}</text>
+      </view>
+      <van-icon name="arrow" size="28" color="#ccc" />
+    </view>
+  </view>
+</view>

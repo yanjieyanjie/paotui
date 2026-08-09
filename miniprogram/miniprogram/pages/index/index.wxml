@@ -1,0 +1,83 @@
+<view class="page">
+  <view class="top-bar" style="padding-top: {{statusBarHeight}}px;">
+    <picker class="school-picker" mode="selector" range="{{schools}}" value="{{schoolIndex}}" bindchange="onSchoolChange">
+      <text class="loc-icon">📍</text>
+      <view class="school-name">{{schoolName}}</view>
+      <view class="school-caret">▾</view>
+    </picker>
+  </view>
+
+  <view class="brand" bindtap="goHall">
+    <view class="brand-line1">爱工商</view>
+    <view class="brand-line2">校园服务平台</view>
+  </view>
+
+  <view class="notice">
+    <view class="notice-icon">📣</view>
+    <text class="notice-text">男寝如需送上楼，请记得备注哦~</text>
+  </view>
+
+  <view class="quick-row">
+    <view class="quick-btn" data-type="express" bindtap="onCardTap">
+      <view class="quick-icon icon-blue">📦</view>
+      <view class="quick-name">快递代取</view>
+      <view class="quick-arrow">›</view>
+    </view>
+    <view class="quick-btn" data-type="food" bindtap="onCardTap">
+      <view class="quick-icon icon-orange">🧤</view>
+      <view class="quick-name">代拿外卖</view>
+      <view class="quick-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="func-grid">
+    <view class="func-item" wx:for="{{services}}" wx:key="key" data-name="{{item.name}}" bindtap="onServiceTap">
+      <view class="func-icon" style="background: {{item.bg}};">{{item.icon}}</view>
+      <view class="func-name">{{item.name}}</view>
+    </view>
+  </view>
+
+  <swiper class="ad-swiper" autoplay="{{true}}" circular="{{true}}" interval="{{3500}}" duration="500" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#ffffff">
+    <swiper-item wx:for="{{ads}}" wx:key="title">
+      <view class="ad-item {{item.cls}}">
+        <view class="ad-emoji">{{item.icon}}</view>
+        <view class="ad-text">
+          <view class="ad-title">{{item.title}}</view>
+          <view class="ad-sub">{{item.sub}}</view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="order-header">
+    <text class="order-title">最新订单</text>
+    <text class="order-more" bindtap="goHall">查看全部 ›</text>
+  </view>
+
+  <view class="list-state" wx:if="{{loading}}">加载中...</view>
+  <view class="list-state" wx:if="{{!loading && orders.length === 0}}">暂无订单，去发布一个吧</view>
+
+  <view class="order-card" wx:for="{{orders}}" wx:key="id" bindtap="goHall">
+    <view class="order-content">{{item.title}}</view>
+    <view class="order-desc" wx:if="{{item.description}}">{{item.description}}</view>
+    <view class="order-meta">
+      <view class="meta-item">
+        <text class="meta-label">截止时间</text>
+        <text class="meta-value">🕐 {{item.deadlineText}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">打赏金额</text>
+        <text class="meta-value reward">¥{{item.rewardText}}</text>
+      </view>
+    </view>
+    <view class="order-foot">
+      <view class="order-progress">
+        <text class="meta-label">订单进度</text>
+        <view class="progress-dot" style="background: {{item.statusColor}};"></view>
+        <text class="progress-text" style="color: {{item.statusColor}};">{{item.statusLabel}}</text>
+      </view>
+      <view class="accept-btn" wx:if="{{item.status === 'OPEN'}}" data-id="{{item.id}}" catchtap="onAccept">立即接单</view>
+      <view class="accept-btn disabled" wx:else>{{item.statusLabel}}</view>
+    </view>
+  </view>
+</view>

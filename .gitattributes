@@ -1,0 +1,9 @@
+# Normalize line endings to LF for consistency
+* text=auto
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.wxml text eol=lf
+*.wxss text eol=lf
+*.wxs text eol=lf
+*.md text eol=lf

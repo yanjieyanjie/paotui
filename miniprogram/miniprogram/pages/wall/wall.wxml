@@ -1,0 +1,27 @@
+<view class="page">
+  <!-- 区域一：本页面 UI 展示 -->
+  <view class="zone zone-ui">
+    <view class="zone-icon">🏫</view>
+    <view class="zone-title">校园墙</view>
+    <view class="zone-desc">分享校园生活，投稿你的内容</view>
+  </view>
+
+  <!-- 区域二：介绍 -->
+  <view class="zone zone-intro">
+    <view class="zone-head">关于校园墙</view>
+    <view class="intro-text">校园墙是同学们分享校园生活、表白交友、寻物招领、吐槽交流的社区空间。欢迎添加墙墙微信，投稿发布你的内容。</view>
+  </view>
+
+  <!-- 区域三：微信二维码 -->
+  <view class="zone zone-qr">
+    <view class="zone-head">添加微信</view>
+    <view class="qr-box">
+      <view class="qr-placeholder">
+        <view class="qr-icon">💬</view>
+        <view class="qr-text">微信二维码</view>
+        <view class="qr-sub">示例占位，后期替换</view>
+      </view>
+    </view>
+    <view class="attach-tip">长按识别二维码，添加墙墙微信</view>
+  </view>
+</view>

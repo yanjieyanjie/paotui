@@ -1,0 +1,8 @@
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  font-size: 30rpx;
+  color: #8a97a5;
+}

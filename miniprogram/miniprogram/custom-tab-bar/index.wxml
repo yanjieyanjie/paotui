@@ -1,0 +1,23 @@
+<view class="tab-bar">
+  <view class="tab-item {{selected === 0 ? 'active' : ''}}" data-index="0" bindtap="onTabTap">
+    <view class="tab-icon">🏠</view>
+    <view class="tab-text">首页</view>
+  </view>
+  <view class="tab-item {{selected === 1 ? 'active' : ''}}" data-index="1" bindtap="onTabTap">
+    <view class="tab-icon">📋</view>
+    <view class="tab-text">接单大厅</view>
+  </view>
+  <view class="tab-center" bindtap="onCenterTap">
+    <view class="center-btn">
+      <view class="center-text">卖闲置</view>
+    </view>
+  </view>
+  <view class="tab-item {{selected === 3 ? 'active' : ''}}" data-index="3" bindtap="onTabTap">
+    <view class="tab-icon">🔔</view>
+    <view class="tab-text">消息列表</view>
+  </view>
+  <view class="tab-item {{selected === 4 ? 'active' : ''}}" data-index="4" bindtap="onTabTap">
+    <view class="tab-icon">👤</view>
+    <view class="tab-text">我的</view>
+  </view>
+</view>

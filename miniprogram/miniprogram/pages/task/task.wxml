@@ -1,0 +1,66 @@
+<view class="page">
+  <!-- 区域一：本页面 UI 展示 -->
+  <view class="zone zone-ui">
+    <view class="zone-icon">✋</view>
+    <view class="zone-title">万能任务</view>
+    <view class="zone-desc">有事找人帮，任务我来发</view>
+  </view>
+
+  <!-- 区域二：帮助内容 -->
+  <view class="zone zone-base">
+    <view class="zone-head">任务内容</view>
+    <view class="field-row">
+      <text class="label">帮助内容（公开）</text>
+      <input class="input" placeholder="请输入帮助内容，如：帮忙取个快递" value="{{helpContent}}" data-field="helpContent" bindinput="onInput" />
+    </view>
+    <view class="field-row field-area">
+      <text class="label">具体内容</text>
+      <textarea class="textarea" placeholder="请输入具体内容，仅接单员可见" value="{{detailContent}}" data-field="detailContent" bindinput="onInput" maxlength="300" />
+    </view>
+    <view class="attach-tip">具体内容仅接单员可见</view>
+  </view>
+
+  <!-- 区域三：性别限制 -->
+  <view class="zone zone-gender">
+    <view class="zone-head">性别限制</view>
+    <view class="gender-row">
+      <view class="gender-btn {{gender === item.key ? 'active' : ''}}" wx:for="{{genderOptions}}" wx:key="key" data-key="{{item.key}}" bindtap="onGenderTap">{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 区域四：附件 -->
+  <view class="zone zone-attach">
+    <view class="zone-head">附件</view>
+    <view class="attach-row">
+      <text class="label">图片</text>
+      <view class="attach-list">
+        <view class="attach-item" wx:for="{{attachments}}" wx:key="path">
+          <image class="attach-img" src="{{item.path}}" mode="aspectFill" />
+          <view class="attach-del" data-index="{{index}}" catchtap="onRemoveAttachment">✕</view>
+        </view>
+        <view class="attach-add" wx:if="{{attachments.length < 3}}" bindtap="onChooseAttachment">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">附件仅接单员可见（最多 3 张，选填）</view>
+  </view>
+
+  <!-- 区域五：赏金 -->
+  <view class="zone zone-reward">
+    <view class="zone-head">赏金</view>
+    <view class="field-row">
+      <text class="label">赏金（¥{{minReward}} 起）</text>
+      <view class="qty-stepper">
+        <view class="step-btn {{reward <= minReward ? 'disabled' : ''}}" catchtap="onRewardMinus">－</view>
+        <view class="step-num">¥{{reward}}</view>
+        <view class="step-btn" catchtap="onRewardPlus">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">赏金最低 ¥{{minReward}}，可适当加价</view>
+  </view>
+
+  <!-- 底部：立即下单 -->
+  <view class="order-bar">
+    <view class="order-total">合计 <text class="total-num">¥{{totalAmount}}</text></view>
+    <button class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="onSubmit">立即下单</button>
+  </view>
+</view>

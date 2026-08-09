@@ -1,0 +1,30 @@
+.msg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx;
+}
+
+.msg-header-title { font-size: 30rpx; font-weight: 700; }
+.msg-header-count { font-size: 24rpx; color: #999; }
+
+.msg-card {
+  position: relative;
+  margin: 20rpx 24rpx;
+  padding: 24rpx;
+}
+
+.msg-card.unread { border-left: 8rpx solid #07c160; }
+
+.msg-dot {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #ff4d4f;
+}
+
+.msg-text { font-size: 28rpx; line-height: 1.6; padding-right: 40rpx; }
+.msg-time { margin-top: 12rpx; font-size: 24rpx; color: #aaa; }

@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  nickname  String
+  avatar    String?
+  phone     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  orders          Order[]         @relation("CreatedOrders")
+  acceptedOrders  Order[]         @relation("AcceptedOrders")
+  messages        Message[]
+}
+
+model Order {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  type        String
+  reward      Decimal   @db.Decimal(10, 2)
+  pickup      String?
+  delivery    String?
+  gender      String?
+  status      String    @default("OPEN")
+  creatorId   Int
+  creator     User      @relation("CreatedOrders", fields: [creatorId], references: [id])
+  acceptedById Int?
+  acceptedBy   User?     @relation("AcceptedOrders", fields: [acceptedById], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  messages    Message[]
+
+  @@index([status])
+  @@index([type])
+  @@index([creatorId])
+  @@index([acceptedById])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  orderId   Int?
+  order     Order?   @relation(fields: [orderId], references: [id])
+  content   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}

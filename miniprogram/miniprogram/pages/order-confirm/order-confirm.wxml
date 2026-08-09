@@ -1,0 +1,52 @@
+<view class="page">
+  <block wx:if="{{draft}}">
+    <view class="card info-card">
+      <view class="info-title">{{draft.title}}</view>
+      <view class="info-desc" wx:if="{{draft.description}}">{{draft.description}}</view>
+      <view class="info-row">
+        <text class="row-label">服务类型</text>
+        <text class="row-value">{{typeLabel}}</text>
+      </view>
+      <view class="info-row" wx:if="{{draft.pickup}}">
+        <text class="row-label">取件地点</text>
+        <text class="row-value">{{draft.pickup}}</text>
+      </view>
+      <view class="info-row" wx:if="{{draft.delivery}}">
+        <text class="row-label">送达地点</text>
+        <text class="row-value">{{draft.delivery}}</text>
+      </view>
+    </view>
+
+    <view class="card amount-card">
+      <view class="amount-row">
+        <text>应付金额</text>
+        <text class="amount">¥{{reward}}</text>
+      </view>
+      <view class="amount-tip">支付成功后订单将进入接单大厅</view>
+    </view>
+
+    <view class="pay-bar">
+      <view class="pay-total">
+        <text>合计：</text>
+        <text class="pay-amount">¥{{reward}}</text>
+      </view>
+      <button class="pay-btn" bindtap="onPayNow" disabled="{{paying}}">立即付款</button>
+    </view>
+
+    <view class="pay-mask" wx:if="{{showPaySheet}}" bindtap="onCloseSheet">
+      <view class="pay-sheet" catchtap="noop">
+        <view class="sheet-title">确认支付</view>
+        <view class="sheet-amount">¥{{reward}}</view>
+        <view class="sheet-method">
+          <view class="wechat-icon">微</view>
+          <text>微信支付</text>
+          <text class="method-check">✔</text>
+        </view>
+        <view class="sheet-actions">
+          <view class="sheet-btn sheet-cancel" bindtap="onCancelPay">取消</view>
+          <view class="sheet-btn sheet-ok" bindtap="onConfirmPay">确认支付</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

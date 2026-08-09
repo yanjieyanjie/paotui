@@ -1,0 +1,74 @@
+.filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 20rpx 24rpx 0;
+}
+
+.order-card { margin: 20rpx 24rpx; padding: 24rpx; }
+
+.order-head { display: flex; justify-content: space-between; align-items: center; }
+.order-title { font-size: 30rpx; font-weight: 600; flex: 1; margin-right: 16rpx; }
+
+.order-desc {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.loc-row { display: flex; align-items: center; gap: 8rpx; margin-top: 10rpx; font-size: 24rpx; color: #888; }
+
+.order-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 20rpx; }
+.order-price { color: #ff4d4f; font-size: 36rpx; font-weight: 700; }
+.order-time { font-size: 24rpx; color: #aaa; margin-left: 16rpx; }
+.order-actions { display: flex; align-items: center; gap: 16rpx; }
+
+.list-footer { text-align: center; color: #bbb; font-size: 24rpx; padding: 24rpx; }
+/* 搜索栏 */
+.search-bar {
+  padding: 16rpx 16rpx 0;
+  background: #ffffff;
+}
+
+/* 筛选行 */
+.filter-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx 20rpx;
+  background: #ffffff;
+  border-bottom: 1rpx solid #f2f3f5;
+}
+
+.filter-row picker {
+  flex: 1;
+  min-width: 0;
+  margin-right: 16rpx;
+}
+
+.filter-row picker:last-child {
+  margin-right: 0;
+}
+
+.filter-item {
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  font-size: 26rpx;
+  color: #666666;
+  padding: 12rpx 0;
+  border: 1rpx solid #f2f3f5;
+  border-radius: 32rpx;
+  background: #ffffff;
+}
+
+.filter-item.active {
+  color: #07c160;
+  border-color: #07c160;
+  background: #f0faf5;
+  font-weight: 600;
+}

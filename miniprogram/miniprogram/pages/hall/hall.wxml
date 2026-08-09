@@ -1,0 +1,77 @@
+<view class="page">
+  <!-- 第一行：搜索栏 -->
+  <view class="search-bar">
+    <van-search value="{{keyword}}" placeholder="搜索订单" bind:change="onSearchInput" bind:search="onSearch" bind:confirm="onSearch" />
+  </view>
+
+  <!-- 第二行：筛选 -->
+  <view class="filter-row">
+    <picker range="{{serviceOptions}}" range-key="label" value="{{serviceIndex}}" bindchange="onServiceChange">
+      <view class="filter-item {{serviceIndex > 0 ? 'active' : ''}}">{{serviceOptions[serviceIndex].label}} ▾</view>
+    </picker>
+
+    <picker range="{{placeOptions}}" range-key="label" value="{{placeIndex}}" bindchange="onPlaceChange">
+      <view class="filter-item {{placeIndex > 0 ? 'active' : ''}}">{{placeOptions[placeIndex].label}} ▾</view>
+    </picker>
+    <picker range="{{genderOptions}}" range-key="label" value="{{genderIndex}}" bindchange="onGenderChange">
+      <view class="filter-item {{genderIndex > 0 ? 'active' : ''}}">{{genderOptions[genderIndex].label}} ▾</view>
+    </picker>
+  </view>
+
+  <view class="filter-bar" wx:if="{{type || keyword}}">
+    <van-tag
+      wx:if="{{type}}"
+      color="#07c160"
+      plain
+      closeable
+      bind:close="onClearType"
+    >类型：{{typeLabels[type]}}</van-tag>
+    <van-tag
+      wx:if="{{keyword}}"
+      color="#07c160"
+      plain
+      closeable
+      bind:close="onClearKeyword"
+    >关键词：{{keyword}}</van-tag>
+  </view>
+
+  <view class="card order-card" wx:for="{{orders}}" wx:key="id">
+    <view class="order-head">
+      <text class="order-title">{{item.title}}</text>
+      <van-tag color="{{item.tagColor}}" plain>{{item.typeLabel}}</van-tag>
+    </view>
+    <view class="order-desc" wx:if="{{item.description}}">{{item.description}}</view>
+    <view class="loc-row" wx:if="{{item.pickup}}">
+      <van-icon name="location-o" size="28" color="#999" />
+      <text>{{item.pickup}}</text>
+    </view>
+    <view class="loc-row" wx:if="{{item.delivery}}">
+      <van-icon name="flag-o" size="28" color="#999" />
+      <text>{{item.delivery}}</text>
+    </view>
+    <view class="order-foot">
+      <view>
+        <text class="order-price">¥{{item.reward}}</text>
+        <text class="order-time">{{item.timeText}}</text>
+      </view>
+      <view class="order-actions">
+        <van-tag type="primary" plain>{{item.statusLabel}}</van-tag>
+        <van-button
+          wx:if="{{item.status === 'OPEN'}}"
+          size="small"
+          type="primary"
+          data-id="{{item.id}}"
+          bindtap="onAccept"
+        >接单</van-button>
+
+      </view>
+    </view>
+  </view>
+
+  <view class="list-footer" wx:if="{{orders.length > 0}}">
+    <text wx:if="{{finished}}">— 没有更多了 —</text>
+    <van-loading wx:else size="20" text="加载中..." />
+  </view>
+
+  <van-empty wx:if="{{!loading && orders.length === 0}}" description="暂无相关任务" />
+</view>

@@ -1,0 +1,27 @@
+<view class="page">
+  <!-- 区域一：本页面 UI 展示 -->
+  <view class="zone zone-ui">
+    <view class="zone-icon">📮</view>
+    <view class="zone-title">投诉/建议</view>
+    <view class="zone-desc">你的意见，我们认真倾听</view>
+  </view>
+
+  <!-- 区域二：介绍 -->
+  <view class="zone zone-intro">
+    <view class="zone-head">联系我们</view>
+    <view class="intro-text">如果你在使用校园跑腿服务过程中遇到任何问题，或者有任何建议，欢迎通过微信联系我们，我们会尽快处理并回复。</view>
+  </view>
+
+  <!-- 区域三：微信二维码 -->
+  <view class="zone zone-qr">
+    <view class="zone-head">添加微信</view>
+    <view class="qr-box">
+      <view class="qr-placeholder">
+        <view class="qr-icon">💬</view>
+        <view class="qr-text">微信二维码</view>
+        <view class="qr-sub">示例占位，后期替换</view>
+      </view>
+    </view>
+    <view class="attach-tip">长按识别二维码，联系客服反馈</view>
+  </view>
+</view>

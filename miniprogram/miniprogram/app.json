@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/express/express",
+    "pages/cleaning/cleaning",
+    "pages/water/water",
+    "pages/send/send",
+    "pages/print/print",
+    "pages/laundry/laundry",
+    "pages/substitute/substitute",
+    "pages/buy/buy",
+    "pages/task/task",
+    "pages/wall/wall",
+    "pages/feedback/feedback",
+    "pages/food/food",
+    "pages/address/address",
+    "pages/my-orders/my-orders",
+    "pages/order-confirm/order-confirm",
+    "pages/pending-pay/pending-pay",
+    "pages/hall/hall",
+    "pages/sell/sell",
+    "pages/messages/messages",
+    "pages/mine/mine"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#D9F0FF",
+    "navigationBarTitleText": "爱工商校园服务平台",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#D9F0FF",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#8A97A5",
+    "selectedColor": "#2F9DE8",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/hall/hall", "text": "接单大厅" },
+      { "pagePath": "pages/sell/sell", "text": "卖闲置" },
+      { "pagePath": "pages/messages/messages", "text": "消息列表" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "usingComponents": {
+    "van-search": "@vant/weapp/search/index",
+    "van-tabs": "@vant/weapp/tabs/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tag": "@vant/weapp/tag/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-empty": "@vant/weapp/empty/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-loading": "@vant/weapp/loading/index"
+  },
+  "sitemapLocation": "sitemap.json"
+}

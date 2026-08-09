@@ -1,0 +1,102 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding-bottom: 40rpx;
+}
+
+.zone {
+  padding: 24rpx 32rpx;
+  border-bottom: 16rpx solid #f7f8fa;
+}
+
+/* 区域一：UI 展示 */
+.zone-ui {
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: none;
+  background: linear-gradient(180deg, #fff1e0 0%, #ffffff 100%);
+}
+
+.zone-icon {
+  font-size: 96rpx;
+}
+
+.zone-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #333333;
+  margin-top: 16rpx;
+}
+
+.zone-desc {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 10rpx;
+}
+
+/* 区域二：介绍 */
+.zone-intro {
+  min-height: 20vh;
+}
+
+.zone-head {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 20rpx;
+}
+
+.intro-text {
+  font-size: 28rpx;
+  color: #555555;
+  line-height: 1.7;
+}
+
+/* 区域三：微信二维码 */
+.zone-qr {
+  border-bottom: none;
+}
+
+.qr-box {
+  display: flex;
+  justify-content: center;
+  padding: 20rpx 0;
+}
+
+.qr-placeholder {
+  width: 320rpx;
+  height: 320rpx;
+  border: 4rpx dashed #dddddd;
+  border-radius: 16rpx;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-icon {
+  font-size: 72rpx;
+}
+
+.qr-text {
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 16rpx;
+}
+
+.qr-sub {
+  font-size: 22rpx;
+  color: #bbbbbb;
+  margin-top: 8rpx;
+}
+
+.attach-tip {
+  font-size: 22rpx;
+  color: #999999;
+  text-align: center;
+  margin-top: 8rpx;
+}

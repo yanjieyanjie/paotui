@@ -1,0 +1,75 @@
+<view class="page">
+  <!-- 列表视图 -->
+  <block wx:if="{{mode == 'list'}}">
+    <view class="list-wrap">
+      <view class="addr-card" wx:for="{{addresses}}" wx:key="id">
+        <view class="addr-head">
+          <text class="addr-name">{{item.receiverName}}</text>
+          <text class="addr-phone">{{item.receiverPhone}}</text>
+          <text wx:if="{{item.isDefault}}" class="default-tag">默认</text>
+        </view>
+        <view class="addr-text" wx:if="{{item.addressText}}">{{item.addressText}}</view>
+        <view class="addr-actions">
+          <text wx:if="{{!item.isDefault}}" class="action-link" data-id="{{item.id}}" bindtap="onSetDefault">设为默认</text>
+          <text class="action-link" data-id="{{item.id}}" bindtap="onEdit">编辑</text>
+          <text class="action-link danger" data-id="{{item.id}}" bindtap="onDelete">删除</text>
+        </view>
+      </view>
+      <view wx:if="{{!addresses.length}}" class="empty">
+        <view class="empty-title">暂无收货地址</view>
+        <view class="empty-tip">添加地址后下单更方便</view>
+        <button class="empty-add" bindtap="onShowForm">新增地址</button>
+      </view>
+    </view>
+
+    <view class="bottom-bar">
+      <button class="add-btn" bindtap="onShowForm">+ 新增地址</button>
+    </view>
+  </block>
+
+  <!-- 表单视图 -->
+  <block wx:else>
+    <view class="form-top">
+      <text class="back-link" bindtap="onBackToList">← 返回</text>
+      <text class="form-title">{{formId ? '编辑地址' : '新增地址'}}</text>
+    </view>
+    <view class="form-card">
+      <picker mode="selector" range="{{schools}}" value="{{schoolIndex}}" bindchange="onSchoolChange">
+        <view class="form-row">
+          <text class="form-label">学校</text>
+          <view class="picker-value {{schools[schoolIndex] ? '' : 'placeholder'}}">
+            {{schools[schoolIndex] || '请选择学校'}}
+          </view>
+        </view>
+      </picker>
+      <view class="form-row">
+        <text class="form-label">收货人</text>
+        <input class="form-input" placeholder="收货人姓名" value="{{receiverName}}" data-field="receiverName" bindinput="onInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">手机号</text>
+        <input class="form-input" type="number" maxlength="11" placeholder="收货人手机号" value="{{receiverPhone}}" data-field="receiverPhone" bindinput="onInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">宿舍楼</text>
+        <input class="form-input" placeholder="如 3 号楼（选填）" value="{{dormitory}}" data-field="dormitory" bindinput="onInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">门牌号</text>
+        <input class="form-input" placeholder="如 501（选填）" value="{{room}}" data-field="room" bindinput="onInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">补充说明</text>
+        <input class="form-input" placeholder="如 放前台（选填）" value="{{detail}}" data-field="detail" bindinput="onInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">设为默认</text>
+        <switch checked="{{isDefault}}" color="#ff7a2f" bindchange="onDefaultSwitchChange" />
+      </view>
+    </view>
+
+    <view class="bottom-bar">
+      <button class="add-btn" bindtap="onSave" disabled="{{submitting}}">保存</button>
+    </view>
+  </block>
+</view>

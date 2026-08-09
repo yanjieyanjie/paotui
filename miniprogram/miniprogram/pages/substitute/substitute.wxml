@@ -1,0 +1,113 @@
+<view class="page">
+  <!-- 区域一：本页面 UI 展示 -->
+  <view class="zone zone-ui">
+    <view class="zone-icon">🛠️</view>
+    <view class="zone-title">代替服务</view>
+    <view class="zone-desc">有事走不开，找人代替完成</view>
+  </view>
+  <!-- 收货地址 -->
+  <view class="zone zone-addr">
+    <view class="zone-head">收货地址</view>
+    <view class="addr-card" bindtap="onAddressTap">
+      <block wx:if="{{address}}">
+        <view class="addr-head">
+          <text class="addr-name">{{address.receiverName}}</text>
+          <text class="addr-phone">{{address.receiverPhone}}</text>
+          <text wx:if="{{address.isDefault}}" class="default-tag">默认</text>
+          <text class="addr-arrow">切换 ▾</text>
+        </view>
+        <view class="addr-text" wx:if="{{address.addressText}}">{{address.addressText}}</view>
+        <view class="addr-tip">点击切换收货地址</view>
+      </block>
+      <block wx:else>
+        <view class="addr-summary">选择收货地址</view>
+        <view class="addr-tip">默认使用我的地址，点击选择或新增</view>
+      </block>
+    </view>
+  </view>
+  <!-- 区域二：服务信息 -->
+  <view class="zone zone-base">
+    <view class="zone-head">服务信息</view>
+    <view class="field-row">
+      <text class="label">服务时间</text>
+      <input class="input" placeholder="请输入服务时间，如：明天 14:00" value="{{serviceTime}}" data-field="serviceTime" bindinput="onInput" />
+    </view>
+    <view class="field-row">
+      <text class="label">服务地点</text>
+      <input class="input" placeholder="请输入服务地点" value="{{servicePlace}}" data-field="servicePlace" bindinput="onInput" />
+    </view>
+    <view class="field-row field-area">
+      <text class="label">服务项目</text>
+      <textarea class="textarea" placeholder="请输入服务项目，如：代上课签到、代取快递等" value="{{serviceItem}}" data-field="serviceItem" bindinput="onInput" maxlength="200" />
+    </view>
+  </view>
+
+  <!-- 区域三：性别限制 -->
+  <view class="zone zone-gender">
+    <view class="zone-head">性别限制</view>
+    <view class="gender-row">
+      <view class="gender-btn {{gender === item.key ? 'active' : ''}}" wx:for="{{genderOptions}}" wx:key="key" data-key="{{item.key}}" bindtap="onGenderTap">{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 区域四：附件 -->
+  <view class="zone zone-attach">
+    <view class="zone-head">附件</view>
+    <view class="attach-row">
+      <text class="label">图片</text>
+      <view class="attach-list">
+        <view class="attach-item" wx:for="{{attachments}}" wx:key="path">
+          <image class="attach-img" src="{{item.path}}" mode="aspectFill" />
+          <view class="attach-del" data-index="{{index}}" catchtap="onRemoveAttachment">✕</view>
+        </view>
+        <view class="attach-add" wx:if="{{attachments.length < 3}}" bindtap="onChooseAttachment">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">附件仅接单员可见（最多 3 张，选填）</view>
+  </view>
+
+  <!-- 区域五：赏金 -->
+  <view class="zone zone-reward">
+    <view class="zone-head">赏金</view>
+    <view class="field-row">
+      <text class="label">赏金（¥{{minReward}} 起）</text>
+      <view class="qty-stepper">
+        <view class="step-btn {{reward <= minReward ? 'disabled' : ''}}" catchtap="onRewardMinus">－</view>
+        <view class="step-num">¥{{reward}}</view>
+        <view class="step-btn" catchtap="onRewardPlus">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">赏金最低 ¥{{minReward}}，可适当加价</view>
+  </view>
+
+
+  <!-- 收货地址选择弹层 -->
+  <view class="addr-mask" wx:if="{{showAddrPicker}}" bindtap="onCloseAddrPicker"></view>
+  <view class="addr-sheet" wx:if="{{showAddrPicker}}">
+    <view class="sheet-head">选择收货地址</view>
+    <scroll-view class="sheet-list" scroll-y>
+      <view class="sheet-item" wx:for="{{addressList}}" wx:key="id" data-id="{{item.id}}" bindtap="onAddressSelect">
+        <view class="sheet-item-main">
+          <view class="sheet-item-head">
+            <text class="sheet-name">{{item.receiverName}}</text>
+            <text class="sheet-phone">{{item.receiverPhone}}</text>
+            <text wx:if="{{item.isDefault}}" class="default-tag">默认</text>
+          </view>
+          <view class="sheet-text">{{item.addressText}}</view>
+        </view>
+        <view class="sheet-check" wx:if="{{selectedId === item.id}}">✓</view>
+      </view>
+      <view wx:if="{{!addressList.length}}" class="sheet-empty">
+        <view class="sheet-empty-title">暂无收货地址</view>
+        <view class="sheet-empty-tip">添加地址后下单更方便</view>
+      </view>
+    </scroll-view>
+    <view class="sheet-add" bindtap="onAddAddress">+ 新增地址</view>
+    <view class="sheet-cancel" bindtap="onCloseAddrPicker">取消</view>
+  </view>
+  <!-- 底部：立即下单 -->
+  <view class="order-bar">
+    <view class="order-total">合计 <text class="total-num">¥{{totalAmount}}</text></view>
+    <button class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="onSubmit">立即下单</button>
+  </view>
+</view>

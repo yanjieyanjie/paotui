@@ -1,0 +1,13 @@
+{
+  "name": "campus-errand-miniprogram",
+  "version": "0.1.0",
+  "private": true,
+  "description": "校园跑腿微信小程序（原生 TS + Vant Weapp）",
+  "dependencies": {
+    "@vant/weapp": "^1.11.7"
+  },
+  "devDependencies": {
+    "miniprogram-api-typings": "^4.0.0",
+    "typescript": "^5.7.2"
+  }
+}

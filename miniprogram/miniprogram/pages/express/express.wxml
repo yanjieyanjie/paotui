@@ -1,0 +1,114 @@
+<view class="page">
+  <!-- 区域一：本页面 UI 展示 -->
+  <view class="zone zone-ui">
+    <view class="zone-icon">📦</view>
+    <view class="zone-title">取快递</view>
+    <view class="zone-desc">填写取件信息，快递送到宿舍门口</view>
+  </view>
+
+  <!-- 区域二：取件点与收货地址 -->
+  <view class="zone zone-addr">
+    <view class="zone-head">取件点与收货地址</view>
+    <view class="pickup-row">
+      <text class="label">取件点</text>
+      <picker range="{{pickupPoints}}" value="{{pickupIndex}}" bindchange="onPickupChange">
+        <view class="picker-value">{{pickupPoints[pickupIndex]}} ▾</view>
+      </picker>
+    </view>
+    <view class="field-row" wx:if="{{isCustomPickup}}">
+      <text class="label">自定义</text>
+      <input class="input" placeholder="请输入取件点名称" value="{{pickupCustom}}" data-field="pickupCustom" bindinput="onInput" />
+    </view>
+    <view class="addr-card" bindtap="onAddressTap">
+      <block wx:if="{{address}}">
+        <view class="addr-head">
+          <text class="addr-name">{{address.receiverName}}</text>
+          <text class="addr-phone">{{address.receiverPhone}}</text>
+          <text wx:if="{{address.isDefault}}" class="default-tag">默认</text>
+          <text class="addr-arrow">切换 ▾</text>
+        </view>
+        <view class="addr-text" wx:if="{{address.addressText}}">{{address.addressText}}</view>
+        <view class="addr-tip">点击切换收货地址</view>
+      </block>
+      <block wx:else>
+        <view class="addr-summary">选择收货地址</view>
+        <view class="addr-tip">默认使用我的地址，点击选择或新增</view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 区域三：快递信息与附件 -->
+  <view class="zone zone-info">
+    <view class="zone-head">快递信息</view>
+    <view class="field-row">
+      <text class="label">取件码</text>
+      <input class="input" placeholder="请输入取件码（必填）" value="{{pickupCode}}" data-field="pickupCode" bindinput="onInput" />
+    </view>
+    <view class="field-row">
+      <text class="label">单号</text>
+      <input class="input" placeholder="快递单号（选填）" value="{{trackingNo}}" data-field="trackingNo" bindinput="onInput" />
+    </view>
+    <view class="field-row">
+      <text class="label">备注</text>
+      <input class="input" placeholder="补充说明（选填）" value="{{remark}}" data-field="remark" bindinput="onInput" />
+    </view>
+    <view class="attach-row">
+      <text class="label">附件</text>
+      <view class="attach-list">
+        <view class="attach-item" wx:for="{{attachments}}" wx:key="path">
+          <image class="attach-img" src="{{item.path}}" mode="aspectFill" />
+          <view class="attach-del" data-index="{{index}}" catchtap="onRemoveAttachment">✕</view>
+        </view>
+        <view class="attach-add" wx:if="{{attachments.length < 3}}" bindtap="onChooseAttachment">＋</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 区域四：选择快递大小 -->
+  <view class="zone zone-size">
+    <view class="zone-head">选择快递大小</view>
+    <view class="size-card" wx:for="{{sizeOptions}}" wx:key="key">
+      <view class="size-info">
+        <view class="size-name">{{item.name}}</view>
+        <view class="size-desc">{{item.desc}}</view>
+        <view class="size-price">¥{{item.price}}</view>
+      </view>
+      <view class="qty-stepper">
+        <view class="step-btn {{sizeQtys[item.key] <= 0 ? 'disabled' : ''}}" data-key="{{item.key}}" catchtap="onSizeMinus">－</view>
+        <view class="step-num">{{sizeQtys[item.key]}}</view>
+        <view class="step-btn" data-key="{{item.key}}" catchtap="onSizeAdd">＋</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部：立即下单 -->
+  <view class="order-bar">
+    <view class="order-total">合计 <text class="total-num">¥{{totalAmount}}</text></view>
+    <button class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="onSubmit">立即下单</button>
+  </view>
+
+  <!-- 收货地址选择弹层 -->
+  <view class="addr-mask" wx:if="{{showAddrPicker}}" bindtap="onCloseAddrPicker"></view>
+  <view class="addr-sheet" wx:if="{{showAddrPicker}}">
+    <view class="sheet-head">选择收货地址</view>
+    <scroll-view class="sheet-list" scroll-y>
+      <view class="sheet-item" wx:for="{{addressList}}" wx:key="id" data-id="{{item.id}}" bindtap="onAddressSelect">
+        <view class="sheet-item-main">
+          <view class="sheet-item-head">
+            <text class="sheet-name">{{item.receiverName}}</text>
+            <text class="sheet-phone">{{item.receiverPhone}}</text>
+            <text wx:if="{{item.isDefault}}" class="default-tag">默认</text>
+          </view>
+          <view class="sheet-text">{{item.addressText}}</view>
+        </view>
+        <view class="sheet-check" wx:if="{{selectedId === item.id}}">✓</view>
+      </view>
+      <view wx:if="{{!addressList.length}}" class="sheet-empty">
+        <view class="sheet-empty-title">暂无收货地址</view>
+        <view class="sheet-empty-tip">添加地址后下单更方便</view>
+      </view>
+    </scroll-view>
+    <view class="sheet-add" bindtap="onAddAddress">+ 新增地址</view>
+    <view class="sheet-cancel" bindtap="onCloseAddrPicker">取消</view>
+  </view>
+</view>

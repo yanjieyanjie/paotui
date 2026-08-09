@@ -1,0 +1,120 @@
+<view class="page">
+  <!-- 区域一：本页面 UI 展示 -->
+  <view class="zone zone-ui">
+    <view class="zone-icon">🖨️</view>
+    <view class="zone-title">打印代送</view>
+    <view class="zone-desc">在线打印，跑腿送达宿舍</view>
+  </view>
+  <!-- 收货地址 -->
+  <view class="zone zone-addr">
+    <view class="zone-head">收货地址</view>
+    <view class="addr-card" bindtap="onAddressTap">
+      <block wx:if="{{address}}">
+        <view class="addr-head">
+          <text class="addr-name">{{address.receiverName}}</text>
+          <text class="addr-phone">{{address.receiverPhone}}</text>
+          <text wx:if="{{address.isDefault}}" class="default-tag">默认</text>
+          <text class="addr-arrow">切换 ▾</text>
+        </view>
+        <view class="addr-text" wx:if="{{address.addressText}}">{{address.addressText}}</view>
+        <view class="addr-tip">点击切换收货地址</view>
+      </block>
+      <block wx:else>
+        <view class="addr-summary">选择收货地址</view>
+        <view class="addr-tip">默认使用我的地址，点击选择或新增</view>
+      </block>
+    </view>
+  </view>
+  <!-- 区域三：打印文件 -->
+  <view class="zone zone-files">
+    <view class="zone-head">打印文件</view>
+    <view class="attach-row">
+      <text class="label">文件</text>
+      <view class="attach-list">
+        <view class="file-item" wx:for="{{files}}" wx:key="path">
+          <text class="file-name">📄 {{item.name}}</text>
+          <view class="attach-del" data-index="{{index}}" catchtap="onRemoveFile">✕</view>
+        </view>
+        <view class="attach-add" wx:if="{{files.length < 3}}" bindtap="onChooseFile">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">从聊天记录选择文件（最多 3 个，支持 PDF/Word/图片等）</view>
+    <view class="attach-row">
+      <text class="label">图片</text>
+      <view class="attach-list">
+        <view class="attach-item" wx:for="{{attachments}}" wx:key="path">
+          <image class="attach-img" src="{{item.path}}" mode="aspectFill" />
+          <view class="attach-del" data-index="{{index}}" catchtap="onRemoveAttachment">✕</view>
+        </view>
+        <view class="attach-add" wx:if="{{attachments.length < 3}}" bindtap="onChooseAttachment">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">可上传图片打印（最多 3 张，选填）</view>
+  </view>
+
+  <!-- 区域四：打印设置 -->
+  <view class="zone zone-settings">
+    <view class="zone-head">打印设置</view>
+    <view class="field-row">
+      <text class="label">打印张数</text>
+      <view class="qty-stepper">
+        <view class="step-btn {{pages <= 1 ? 'disabled' : ''}}" catchtap="onPagesMinus">－</view>
+        <view class="step-num">{{pages}}</view>
+        <view class="step-btn" catchtap="onPagesPlus">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">也可直接输入张数，最多 500 张</view>
+    <view class="style-card" wx:for="{{printStyles}}" wx:key="key" data-key="{{item.key}}" bindtap="onStyleTap">
+      <view class="style-info">
+        <view class="style-name">{{item.name}}</view>
+        <view class="style-desc">{{item.desc}}</view>
+      </view>
+      <view class="style-check {{styleKey === item.key ? 'checked' : ''}}">{{styleKey === item.key ? '✓' : ''}}</view>
+    </view>
+  </view>
+
+  <!-- 区域五：跑腿配送费 -->
+  <view class="zone zone-fee">
+    <view class="zone-head">跑腿配送费</view>
+    <view class="field-row">
+      <text class="label">配送费（¥{{minFee}} 起）</text>
+      <view class="qty-stepper">
+        <view class="step-btn {{deliveryFee <= minFee ? 'disabled' : ''}}" catchtap="onFeeMinus">－</view>
+        <view class="step-num">¥{{deliveryFee}}</view>
+        <view class="step-btn" catchtap="onFeePlus">＋</view>
+      </view>
+    </view>
+    <view class="attach-tip">跑腿配送费最低 ¥{{minFee}}，可适当加价</view>
+  </view>
+
+
+  <!-- 收货地址选择弹层 -->
+  <view class="addr-mask" wx:if="{{showAddrPicker}}" bindtap="onCloseAddrPicker"></view>
+  <view class="addr-sheet" wx:if="{{showAddrPicker}}">
+    <view class="sheet-head">选择收货地址</view>
+    <scroll-view class="sheet-list" scroll-y>
+      <view class="sheet-item" wx:for="{{addressList}}" wx:key="id" data-id="{{item.id}}" bindtap="onAddressSelect">
+        <view class="sheet-item-main">
+          <view class="sheet-item-head">
+            <text class="sheet-name">{{item.receiverName}}</text>
+            <text class="sheet-phone">{{item.receiverPhone}}</text>
+            <text wx:if="{{item.isDefault}}" class="default-tag">默认</text>
+          </view>
+          <view class="sheet-text">{{item.addressText}}</view>
+        </view>
+        <view class="sheet-check" wx:if="{{selectedId === item.id}}">✓</view>
+      </view>
+      <view wx:if="{{!addressList.length}}" class="sheet-empty">
+        <view class="sheet-empty-title">暂无收货地址</view>
+        <view class="sheet-empty-tip">添加地址后下单更方便</view>
+      </view>
+    </scroll-view>
+    <view class="sheet-add" bindtap="onAddAddress">+ 新增地址</view>
+    <view class="sheet-cancel" bindtap="onCloseAddrPicker">取消</view>
+  </view>
+  <!-- 底部：立即下单 -->
+  <view class="order-bar">
+    <view class="order-total">合计 <text class="total-num">¥{{totalAmount}}</text></view>
+    <button class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="onSubmit">立即下单</button>
+  </view>
+</view>

@@ -1,0 +1,121 @@
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 48rpx 40rpx;
+  background: linear-gradient(135deg, #07c160, #10b981);
+  color: #fff;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  font-weight: 700;
+  margin-right: 24rpx;
+}
+
+.nickname { font-size: 36rpx; font-weight: 700; }
+.phone { margin-top: 8rpx; font-size: 26rpx; opacity: 0.9; }
+
+.identity-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24rpx;
+  padding: 32rpx 28rpx;
+}
+
+.identity-label {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.identity-value {
+  margin-top: 8rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333333;
+}
+
+.identity-switch {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 14rpx 26rpx;
+  border-radius: 32rpx;
+  background: #f0faf5;
+  color: #07c160;
+  font-size: 26rpx;
+}
+
+.wallet-card { display: flex; flex-wrap: wrap; margin: 24rpx; padding: 32rpx 16rpx; }
+.wallet-item { width: 33.33%; box-sizing: border-box; text-align: center; padding: 12rpx 0; }
+.wallet-num { font-size: 40rpx; font-weight: 700; color: #07c160; }
+.wallet-label { margin-top: 8rpx; font-size: 24rpx; color: #999999; }
+
+.menu-group {
+  margin: 0 24rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: #fff;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border-bottom: 1rpx solid #f2f3f5;
+}
+
+.menu-item:last-child { border-bottom: none; }
+.menu-left { display: flex; align-items: center; gap: 16rpx; }
+.menu-title { font-size: 28rpx; color: #333; }
+/* 我的订单五个按钮 */
+.order-grid-card {
+  margin: 24rpx;
+  padding: 24rpx 8rpx 8rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+}
+
+.order-grid-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  padding: 0 16rpx 16rpx;
+}
+
+.order-grid {
+  display: flex;
+}
+
+.order-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.order-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+}
+
+.order-name {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #333333;
+  text-align: center;
+}
