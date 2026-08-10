@@ -1,0 +1,289 @@
+page {
+  background: #f7f8fa;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.chat-header {
+  background: #d9f0ff;
+  padding: 16rpx 28rpx 20rpx;
+  flex-shrink: 0;
+}
+
+.chat-header-hover { opacity: 0.9; }
+
+.chat-peer {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #222;
+}
+
+.chat-status {
+  display: inline-block;
+  margin-left: 16rpx;
+  padding: 4rpx 16rpx;
+  font-size: 22rpx;
+  line-height: 1.4;
+  border: 1rpx solid;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.chat-order {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-tip {
+  margin-top: 2rpx;
+  font-size: 20rpx;
+  color: #999;
+}
+
+.chat-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+.chat-loading {
+  text-align: center;
+  padding: 80rpx 0;
+  color: #999;
+  font-size: 26rpx;
+}
+
+.chat-list {
+  padding: 20rpx 24rpx 16rpx;
+}
+
+.msg-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.row-mine {
+  flex-direction: row-reverse;
+}
+
+.bubble-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #d9f0ff;
+}
+
+.bubble-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #07c160;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bubble-wrap {
+  max-width: 70%;
+  margin-left: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.row-mine .bubble-wrap {
+  margin-left: 0;
+  margin-right: 16rpx;
+  align-items: flex-end;
+}
+
+.bubble {
+  padding: 18rpx 22rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  color: #1f2329;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.bubble-mine {
+  background: #95ec69;
+}
+
+.bubble-img-wrap {
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.bubble-img {
+  width: 320rpx;
+  max-width: 320rpx;
+  border-radius: 12rpx;
+  display: block;
+}
+
+.bubble-location {
+  background: #ffffff;
+  padding: 18rpx 22rpx;
+  min-width: 240rpx;
+}
+
+.loc-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2f9de8;
+}
+
+.loc-address {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #666;
+  word-break: break-all;
+}
+
+.bubble-audio {
+  display: flex;
+  align-items: center;
+  min-width: 200rpx;
+}
+
+.audio-icon {
+  font-size: 26rpx;
+  margin-right: 12rpx;
+}
+
+.audio-text {
+  font-size: 28rpx;
+}
+
+.bubble-time {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: #bbb;
+}
+
+.panel {
+  background: #ffffff;
+  border-top: 1rpx solid #f2f3f5;
+  flex-shrink: 0;
+}
+
+.quick-panel {
+  padding: 16rpx 0;
+}
+
+.quick-scroll {
+  white-space: nowrap;
+}
+
+.quick-item {
+  display: inline-block;
+  margin-left: 16rpx;
+  padding: 12rpx 24rpx;
+  background: #f2f3f5;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+
+.more-panel {
+  display: flex;
+  padding: 24rpx 16rpx;
+}
+
+.more-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140rpx;
+}
+
+.more-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  background: #f2f3f5;
+  font-size: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.more-label {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #555;
+}
+
+.chat-input-bar {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 16rpx;
+  padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1rpx solid #f2f3f5;
+  flex-shrink: 0;
+}
+
+.bar-btn {
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  font-size: 40rpx;
+  flex-shrink: 0;
+  border-radius: 12rpx;
+}
+
+.bar-btn-hover {
+  background: #f2f3f5;
+}
+
+.bar-btn-active {
+  background: #f2f3f5;
+}
+
+.chat-input {
+  flex: 1;
+  height: 72rpx;
+  margin: 0 12rpx;
+  background: #f2f3f5;
+  border-radius: 36rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+}
+
+.talk-btn {
+  flex: 1;
+  height: 72rpx;
+  margin: 0 12rpx;
+  background: #f2f3f5;
+  border-radius: 36rpx;
+  font-size: 28rpx;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.talk-btn-active {
+  background: #e5e6e8;
+  color: #999;
+}

@@ -1,11 +1,15 @@
 <view class="page">
   <view class="user-card">
-    <view class="avatar">{{avatarChar}}</view>
+    <view class="avatar">
+      <image wx:if="{{user && user.avatar}}" class="avatar-img" src="{{user.avatar}}" mode="aspectFill" />
+      <text wx:else>{{avatarChar}}</text>
+    </view>
     <view class="user-info" wx:if="{{user}}">
       <view class="nickname">{{user.nickname}}</view>
       <view class="phone">{{user.phone}}</view>
     </view>
     <van-loading wx:else size="24" color="#fff" />
+    <view class="edit-profile-btn" bindtap="onEditProfile">修改个人信息</view>
   </view>
 
   <view class="identity-card card">
@@ -40,6 +44,10 @@
         <view class="order-icon" style="background: {{item.bg}};">{{item.icon}}</view>
         <view class="order-name">{{item.name}}</view>
       </view>
+    </view>
+    <view class="apply-row" wx:if="{{identityIndex === 0}}">
+      <view class="apply-btn apply-runner" data-page="runner" bindtap="onApplyTap">成为接单员</view>
+      <view class="apply-btn apply-promoter" data-page="promoter" bindtap="onApplyTap">成为推广员</view>
     </view>
   </view>
   <view class="menu-group">

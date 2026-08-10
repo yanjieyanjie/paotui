@@ -4,7 +4,10 @@ export interface User {
   id: number;
   nickname: string;
   avatar?: string | null;
+  major?: string | null;
+  gender?: string | null;
   phone?: string | null;
+  isRunner: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -29,10 +32,28 @@ export interface Order {
 export interface Message {
   id: number;
   userId: number;
+  fromUserId?: number | null;
   orderId?: number | null;
   content: string;
   isRead: boolean;
   createdAt: string;
+}
+
+export interface ChatMessage extends Message {
+  type?: string;
+  fromUser?: Pick<User, 'id' | 'nickname' | 'avatar'> | null;
+}
+
+export interface Conversation {
+  key: string;
+  orderId: number;
+  orderTitle: string;
+  otherUserId: number;
+  otherNickname: string;
+  otherAvatar?: string | null;
+  lastContent: string;
+  lastTime: string;
+  unreadCount: number;
 }
 
 export interface PageResult<T> {
@@ -67,6 +88,10 @@ export interface DisplayOrder extends Order {
   statusLabel: string;
   tagColor: string;
   timeText: string;
+  deadlineText: string;
+  avatarText: string;
+  avatarUrl: string;
+  creatorName: string;
 }
 
 export const ORDER_TYPE_LABELS: Record<string, string> = {

@@ -1,7 +1,7 @@
 import { createOrder, payOrder } from '../../services/orders';
 import { ORDER_TYPE_LABELS } from '../../types/index';
 import { ORDER_DRAFT_KEY } from '../../utils/order-flow';
-import { DEMO_USER_ID } from '../../utils/config';
+import { getCurrentUserId } from '../../utils/account';
 import type { OrderDraft } from '../../utils/order-flow';
 
 Page({
@@ -35,7 +35,7 @@ Page({
 
   async createPendingOrder(draft: OrderDraft) {
     try {
-      const order = await createOrder({ ...draft, creatorId: DEMO_USER_ID });
+      const order = await createOrder({ ...draft, creatorId: getCurrentUserId() });
       this.setData({ orderId: order.id });
     } catch {
       wx.showToast({ title: '下单失败，请确认后端已启动', icon: 'none' });

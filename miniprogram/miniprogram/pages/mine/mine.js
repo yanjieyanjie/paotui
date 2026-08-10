@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = require("../../services/users");
+const account_1 = require("../../utils/account");
+const identity_1 = require("../../utils/identity");
 Page({
     data: {
         user: null,
@@ -9,7 +11,7 @@ Page({
             { value: 'publisher', label: '发布者' },
             { value: 'runner', label: '跑腿员' },
         ],
-        identityIndex: 0,
+        identityIndex: (0, identity_1.getCurrentIdentity)() === 'runner' ? 1 : 0,
         publisherWallet: [
             { key: 0, value: '0', label: '积分' },
             { key: 1, value: '0', label: '优惠劵' },
@@ -46,7 +48,7 @@ Page({
     },
     async loadData() {
         try {
-            const user = await (0, users_1.getDemoUser)();
+            const user = await (0, users_1.getUser)((0, account_1.getCurrentUserId)());
             const stats = await (0, users_1.getUserStats)(user.id);
             this.setData({
                 user,
@@ -70,13 +72,29 @@ Page({
             wx.showToast({ title: '加载失败，请确认后端已启动', icon: 'none' });
         }
     },
+    onEditProfile() {
+        wx.navigateTo({ url: '/pages/profile-edit/profile-edit' });
+    },
     onIdentityChange(e) {
         const index = Number(e.detail.value) || 0;
         this.setData({ identityIndex: index });
+        const option = this.data.identityOptions[index];
+        if (option) {
+            (0, identity_1.setCurrentIdentity)(option.value);
+        }
     },
     onOrderTabTap(e) {
         const tab = Number(e.currentTarget.dataset.tab) || 0;
         wx.navigateTo({ url: `/pages/my-orders/my-orders?tab=${tab}` });
+    },
+    onApplyTap(e) {
+        const { page } = e.currentTarget.dataset;
+        if (page === 'runner') {
+            wx.navigateTo({ url: '/pages/runner-apply/runner-apply' });
+        }
+        else if (page === 'promoter') {
+            wx.navigateTo({ url: '/pages/promoter-apply/promoter-apply' });
+        }
     },
     onMenuTap(e) {
         const { title } = e.currentTarget.dataset;

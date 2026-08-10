@@ -1,0 +1,75 @@
+page {
+  background: #f7f8fa;
+}
+
+.page {
+  padding-bottom: 40rpx;
+}
+
+.search-bar {
+  padding: 20rpx 24rpx;
+  background: #ffffff;
+}
+
+.section {
+  margin: 20rpx 24rpx 0;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  color: #999999;
+  margin-bottom: 16rpx;
+}
+
+.school-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 8rpx;
+  border-bottom: 1rpx solid #f2f3f5;
+}
+
+.school-item:last-child {
+  border-bottom: none;
+}
+
+.school-item-hover {
+  opacity: 0.85;
+}
+
+.school-item.current .school-name {
+  color: #07c160;
+  font-weight: 700;
+}
+
+.school-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+  line-height: 1;
+}
+
+.school-name {
+  flex: 1;
+  font-size: 30rpx;
+  color: #1f2329;
+}
+
+.school-check {
+  color: #07c160;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.school-dist {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.empty {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #999999;
+  font-size: 26rpx;
+}

@@ -1,5 +1,7 @@
-import { getDemoUser, getUserStats } from '../../services/users';
+import { getUser, getUserStats } from '../../services/users';
+import { getCurrentUserId } from '../../utils/account';
 import type { User } from '../../types';
+import { getCurrentIdentity, setCurrentIdentity } from '../../utils/identity';
 
 interface MenuItem {
   title: string;
@@ -33,7 +35,7 @@ Page({
       { value: 'publisher', label: '发布者' },
       { value: 'runner', label: '跑腿员' },
     ] as IdentityOption[],
-    identityIndex: 0,
+    identityIndex: getCurrentIdentity() === 'runner' ? 1 : 0,
     publisherWallet: [
       { key: 0, value: '0', label: '积分' },
       { key: 1, value: '0', label: '优惠劵' },
@@ -73,7 +75,7 @@ Page({
 
   async loadData() {
     try {
-      const user = await getDemoUser();
+      const user = await getUser(getCurrentUserId());
       const stats = await getUserStats(user.id);
       this.setData({
         user,
@@ -97,9 +99,17 @@ Page({
     }
   },
 
+  onEditProfile() {
+    wx.navigateTo({ url: '/pages/profile-edit/profile-edit' });
+  },
+
   onIdentityChange(e: WechatMiniprogram.PickerChange) {
     const index = Number(e.detail.value) || 0;
     this.setData({ identityIndex: index });
+    const option = this.data.identityOptions[index];
+    if (option) {
+      setCurrentIdentity(option.value as 'publisher' | 'runner');
+    }
   },
 
   onOrderTabTap(e: WechatMiniprogram.TouchEvent) {
@@ -107,6 +117,14 @@ Page({
     wx.navigateTo({ url: `/pages/my-orders/my-orders?tab=${tab}` });
   },
 
+  onApplyTap(e: WechatMiniprogram.TouchEvent) {
+    const { page } = e.currentTarget.dataset as { page: string };
+    if (page === 'runner') {
+      wx.navigateTo({ url: '/pages/runner-apply/runner-apply' });
+    } else if (page === 'promoter') {
+      wx.navigateTo({ url: '/pages/promoter-apply/promoter-apply' });
+    }
+  },
   onMenuTap(e: WechatMiniprogram.TouchEvent) {
     const { title } = e.currentTarget.dataset as { title: string };
     if (title === '我的地址') {

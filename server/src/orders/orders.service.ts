@@ -28,6 +28,15 @@ export class OrdersService {
       ...(query.gender ? { gender: query.gender } : {}),
       ...(query.type ? { type: query.type } : {}),
       ...(query.keyword ? { title: { contains: query.keyword } } : {}),
+      ...(query.acceptedById ? { acceptedById: query.acceptedById } : {}),
+      ...(query.involvedUserId
+        ? {
+            OR: [
+              { creatorId: query.involvedUserId },
+              { acceptedById: query.involvedUserId },
+            ],
+          }
+        : {}),
     };
     const [items, total] = await Promise.all([
       this.prisma.order.findMany({
@@ -84,8 +93,8 @@ export class OrdersService {
 
   async cancel(id: number) {
     const order = await this.findOne(id);
-    if (order.status !== 'PAYMENT_PENDING') {
-      throw new ConflictException('只有待支付订单可以取消');
+    if (order.status !== 'PAYMENT_PENDING' && order.status !== 'OPEN') {
+      throw new ConflictException('只有待支付或待接单的任务可以撤回');
     }
     return this.prisma.order.update({
       where: { id },
@@ -94,14 +103,14 @@ export class OrdersService {
     });
   }
 
-  async accept(id: number) {
+  async accept(id: number, userId?: number) {
     const order = await this.findOne(id);
     if (order.status !== 'OPEN') {
       throw new ConflictException('只有待接单的任务可以接单');
     }
     return this.prisma.order.update({
       where: { id },
-      data: { status: 'ACCEPTED', acceptedById: DEFAULT_USER_ID },
+      data: { status: 'ACCEPTED', acceptedById: userId ?? DEFAULT_USER_ID },
       include: { creator: true },
     });
   }
@@ -131,8 +140,8 @@ export class OrdersService {
 
   async confirm(id: number) {
     const order = await this.findOne(id);
-    if (order.status !== 'COMPLETION_PENDING') {
-      throw new ConflictException('只有待确认的任务可以确认完成');
+    if (order.status !== 'ACCEPTED' && order.status !== 'COMPLETION_PENDING') {
+      throw new ConflictException('只有进行中或待确认的任务可以确认完成');
     }
     return this.prisma.order.update({
       where: { id },

@@ -1,0 +1,71 @@
+<view class="page">
+  <view class="chat-header" bindtap="onOrderTap" hover-class="chat-header-hover">
+    <view class="chat-peer">
+      <text>{{otherNickname || '对方'}}</text>
+      <text wx:if="{{orderStatusLabel}}" class="chat-status" style="color: {{orderStatusColor}}; border-color: {{orderStatusColor}};">{{orderStatusLabel}}</text>
+    </view>
+    <view class="chat-order">订单：{{orderTitle}}</view>
+    <view class="chat-tip">点击查看订单详情 ›</view>
+  </view>
+
+  <scroll-view class="chat-body" scroll-y scroll-into-view="{{scrollIntoView}}" scroll-with-animation>
+    <view wx:if="{{loading}}" class="chat-loading">加载中...</view>
+    <view class="chat-list" wx:if="{{!loading}}">
+      <view
+        wx:for="{{messages}}"
+        wx:key="id"
+        id="msg-{{item.id}}"
+        class="msg-row {{item.mine ? 'row-mine' : ''}}"
+      >
+        <view class="bubble-avatar">
+          <view class="bubble-avatar-fallback">{{item.avatarText}}</view>
+        </view>
+        <view class="bubble-wrap">
+          <view wx:if="{{item.type === 'image'}}" class="bubble-img-wrap">
+            <image class="bubble-img" src="{{item.imageSrc}}" mode="widthFix" />
+          </view>
+          <view wx:elif="{{item.type === 'location'}}" class="bubble bubble-location" bindtap="onLocationTap" data-index="{{index}}">
+            <view class="loc-name">📍 {{item.location.name || '位置'}}</view>
+            <view class="loc-address" wx:if="{{item.location.address}}">{{item.location.address}}</view>
+          </view>
+          <view wx:elif="{{item.type === 'audio'}}" class="bubble bubble-audio {{item.mine ? 'bubble-mine' : ''}}" bindtap="togglePlay" data-id="{{item.id}}">
+            <text class="audio-icon">{{playingId === item.id ? '⏸' : '▶'}}</text>
+            <text class="audio-text">语音消息</text>
+          </view>
+          <view wx:else class="bubble {{item.mine ? 'bubble-mine' : ''}}">{{item.content}}</view>
+          <view class="bubble-time">{{item.timeText}}</view>
+        </view>
+      </view>
+      <van-empty wx:if="{{messages.length === 0}}" description="暂无消息，快来打个招呼吧" />
+    </view>
+  </scroll-view>
+
+  <view class="panel quick-panel" wx:if="{{showQuick}}">
+    <scroll-view scroll-x class="quick-scroll">
+      <view class="quick-item" wx:for="{{quickPhrases}}" wx:key="*this" data-text="{{item}}" bindtap="onQuickTap">{{item}}</view>
+    </scroll-view>
+  </view>
+
+  <view class="panel more-panel" wx:if="{{showMore}}">
+    <view class="more-item" bindtap="chooseAlbum">
+      <view class="more-icon">🖼️</view>
+      <text class="more-label">相册</text>
+    </view>
+    <view class="more-item" bindtap="chooseCamera">
+      <view class="more-icon">📷</view>
+      <text class="more-label">拍照</text>
+    </view>
+    <view class="more-item" bindtap="chooseLocation">
+      <view class="more-icon">📍</view>
+      <text class="more-label">位置</text>
+    </view>
+  </view>
+
+  <view class="chat-input-bar">
+    <view class="bar-btn" bindtap="toggleVoice" hover-class="bar-btn-hover">{{voiceMode ? '⌨️' : '🎤'}}</view>
+    <input wx:if="{{!voiceMode}}" class="chat-input" value="{{input}}" bindinput="onInput" placeholder="输入消息..." confirm-type="send" bindconfirm="onSend" cursor-spacing="20" />
+    <view wx:else class="talk-btn {{recording ? 'talk-btn-active' : ''}}" bindtouchstart="startRecord" bindtouchend="stopRecord" bindtouchcancel="stopRecord">{{recording ? '松开 结束' : '按住 说话'}}</view>
+    <view class="bar-btn" bindtap="toggleQuick" hover-class="bar-btn-hover">💬</view>
+    <view class="bar-btn {{showMore ? 'bar-btn-active' : ''}}" bindtap="toggleMore" hover-class="bar-btn-hover">＋</view>
+  </view>
+</view>

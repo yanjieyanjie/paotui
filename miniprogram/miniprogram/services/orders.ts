@@ -7,6 +7,8 @@ export interface OrderQuery {
   type?: string;
   keyword?: string;
   gender?: string;
+  acceptedById?: number;
+  involvedUserId?: number;
   page?: number;
   pageSize?: number;
 }
@@ -26,8 +28,12 @@ export function getOrders(query: OrderQuery = {}): Promise<PageResult<Order>> {
   return request<PageResult<Order>>({ url: '/orders', data: query });
 }
 
-export function acceptOrder(id: number): Promise<Order> {
-  return request<Order>({ url: `/orders/${id}/accept`, method: 'PATCH' });
+export function getOrder(id: number): Promise<Order> {
+  return request<Order>({ url: `/orders/${id}` });
+}
+
+export function acceptOrder(id: number, userId?: number): Promise<Order> {
+  return request<Order>({ url: `/orders/${id}/accept`, method: 'PATCH', data: { userId } });
 }
 
 export function doneOrder(id: number): Promise<Order> {

@@ -1,0 +1,20 @@
+<view class="page" wx:if="{{ad}}">
+  <view class="hero {{ad.cls}}">
+    <view class="hero-emoji">{{ad.icon}}</view>
+    <view class="hero-title">{{ad.title}}</view>
+    <view class="hero-sub">{{ad.subtitle}}</view>
+  </view>
+
+  <view class="card points-card">
+    <view class="points-title">为什么选择我们</view>
+    <view class="point-row" wx:for="{{ad.points}}" wx:key="*this">
+      <text class="point-check">✓</text>
+      <text class="point-text">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="cta-btn" hover-class="cta-btn-hover" bindtap="onCta">{{ad.cta}}</button>
+    <view class="footer-tip">提交后由校园负责人联系你，请留意消息</view>
+  </view>
+</view>

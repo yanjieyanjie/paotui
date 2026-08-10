@@ -2,31 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const orders_1 = require("../../services/orders");
 const format_1 = require("../../utils/format");
-const STATUS_COLORS = {
-    OPEN: '#2F9DE8',
-    ACCEPTED: '#FF9F43',
-    DONE: '#52C41A',
-    CANCELLED: '#8A97A5',
-};
-function formatDeadline(createdAt) {
-    const date = new Date(createdAt);
-    if (Number.isNaN(date.getTime())) {
-        return '';
-    }
-    date.setHours(date.getHours() + 3);
-    const pad = (n) => String(n).padStart(2, '0');
-    return `${date.getMonth() + 1}月${date.getDate()}日 ${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
-function formatReward(reward) {
-    const num = Number(reward);
-    return Number.isFinite(num) ? String(num) : reward;
-}
+const account_1 = require("../../utils/account");
+const identity_1 = require("../../utils/identity");
+const REFRESH_INTERVAL = 30000;
+let refreshTimer = 0;
 Page({
     data: {
         statusBarHeight: 20,
-        schools: ['重庆工商职业学院', '重庆工商职业学院 · 合川校区'],
-        schoolIndex: 0,
-        schoolName: '重庆工商职业学院',
+        schoolName: '',
         services: [
             { key: 0, name: '快递代寄', icon: '📦', bg: '#E8F3FF' },
             { key: 1, name: '搬水', icon: '🛢️', bg: '#E6F7EE' },
@@ -40,9 +23,9 @@ Page({
             { key: 9, name: '投诉/建议', icon: '📮', bg: '#FFF7DE' },
         ],
         ads: [
-            { title: '新用户下单立减3元', sub: '校园跑腿 · 首单福利', icon: '💰', cls: 'ad-1' },
-            { title: '学生自营 · 极速送达', sub: '骑手就近接单，平均30分钟', icon: '⚡', cls: 'ad-2' },
-            { title: '接单赚赏金', sub: '课余时间，随时随地接单', icon: '🎁', cls: 'ad-3' },
+            { type: 'runner', title: '招募接单员', sub: '课余时间 · 接单赚赏金', icon: '🚴', cls: 'ad-1' },
+            { type: 'driving', title: '学校附近最便宜驾校', sub: '学生团报 · 低价学车', icon: '🚗', cls: 'ad-2' },
+            { type: 'training', title: '最优质培训机构', sub: '名师小班 · 考证无忧', icon: '🎓', cls: 'ad-3' },
         ],
         orders: [],
         loading: true,
@@ -57,16 +40,32 @@ Page({
         if (tabBar) {
             tabBar.setData({ selected: 0 });
         }
+        this.setData({ schoolName: wx.getStorageSync('selectedSchool') || '重庆工商职业学院' });
         this.loadOrders();
+        if (!refreshTimer) {
+            refreshTimer = setInterval(() => this.loadOrders(), REFRESH_INTERVAL);
+        }
+    },
+    onHide() {
+        if (refreshTimer) {
+            clearInterval(refreshTimer);
+            refreshTimer = 0;
+        }
+    },
+    onUnload() {
+        if (refreshTimer) {
+            clearInterval(refreshTimer);
+            refreshTimer = 0;
+        }
     },
     async loadOrders() {
         try {
             const res = await (0, orders_1.getOrders)({ status: 'OPEN', page: 1, pageSize: 10 });
+            const currentUserId = (0, account_1.getCurrentUserId)();
             const orders = (0, format_1.decorateOrders)(res.items).map((item) => ({
                 ...item,
-                deadlineText: formatDeadline(item.createdAt),
-                rewardText: formatReward(item.reward),
-                statusColor: STATUS_COLORS[item.status] ?? '#8A97A5',
+                showAccept: item.status === 'OPEN' && item.creatorId !== currentUserId,
+                showWithdraw: item.status === 'OPEN' && item.creatorId === currentUserId,
             }));
             this.setData({ orders, loading: false });
         }
@@ -75,12 +74,22 @@ Page({
             wx.showToast({ title: '加载失败，请确认后端已启动', icon: 'none' });
         }
     },
-    onSchoolChange(e) {
-        const index = Number(e.detail.value);
-        this.setData({
-            schoolIndex: index,
-            schoolName: this.data.schools[index],
-        });
+    onPullDownRefresh() {
+        this.loadOrders();
+        wx.stopPullDownRefresh();
+    },
+    onSchoolTap() {
+        wx.navigateTo({ url: '/pages/school-select/school-select' });
+    },
+    onAdTap(e) {
+        const { type } = e.currentTarget.dataset;
+        if (type === 'runner') {
+            wx.navigateTo({ url: '/pages/runner-apply/runner-apply' });
+            return;
+        }
+        if (type === 'driving' || type === 'training') {
+            wx.navigateTo({ url: `/pages/ad/ad?type=${type}` });
+        }
     },
     onCardTap(e) {
         const { type } = e.currentTarget.dataset;
@@ -138,15 +147,56 @@ Page({
         }
         wx.showToast({ title: `${name} · 敬请期待`, icon: 'none' });
     },
+    onOrderTap(e) {
+        const { id } = e.currentTarget.dataset;
+        wx.navigateTo({ url: `/pages/order-detail/order-detail?id=${id}` });
+    },
     async onAccept(e) {
         const { id } = e.currentTarget.dataset;
+        const canGrab = await (0, identity_1.ensureRunnerIdentity)();
+        if (!canGrab) {
+            return;
+        }
+        const confirmed = await new Promise((resolve) => {
+            wx.showModal({
+                title: '确认抢单',
+                content: '确定抢下这个订单吗？',
+                success: (res) => resolve(res.confirm),
+                fail: () => resolve(false),
+            });
+        });
+        if (!confirmed) {
+            return;
+        }
         try {
-            await (0, orders_1.acceptOrder)(id);
-            wx.showToast({ title: '接单成功', icon: 'success' });
+            await (0, orders_1.acceptOrder)(id, (0, account_1.getCurrentUserId)());
+            wx.showToast({ title: '抢单成功', icon: 'success' });
             this.loadOrders();
         }
         catch (err) {
-            wx.showToast({ title: err.message || '接单失败', icon: 'none' });
+            wx.showToast({ title: err.message || '抢单失败', icon: 'none' });
+        }
+    },
+    async onCancel(e) {
+        const { id } = e.currentTarget.dataset;
+        const confirmed = await new Promise((resolve) => {
+            wx.showModal({
+                title: '撤回任务',
+                content: '确定撤回这个任务吗？撤回后任务将下架',
+                success: (res) => resolve(res.confirm),
+                fail: () => resolve(false),
+            });
+        });
+        if (!confirmed) {
+            return;
+        }
+        try {
+            await (0, orders_1.cancelOrder)(id);
+            wx.showToast({ title: '已撤回', icon: 'success' });
+            this.loadOrders();
+        }
+        catch (err) {
+            wx.showToast({ title: err.message || '撤回失败', icon: 'none' });
         }
     },
     goHall(type) {

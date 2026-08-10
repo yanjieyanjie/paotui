@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/school-select/school-select",
     "pages/express/express",
     "pages/cleaning/cleaning",
     "pages/water/water",
@@ -16,10 +17,16 @@
     "pages/address/address",
     "pages/my-orders/my-orders",
     "pages/order-confirm/order-confirm",
+    "pages/order-detail/order-detail",
     "pages/pending-pay/pending-pay",
+    "pages/runner-apply/runner-apply",
+    "pages/promoter-apply/promoter-apply",
+    "pages/profile-edit/profile-edit",
     "pages/hall/hall",
     "pages/sell/sell",
     "pages/messages/messages",
+    "pages/chat/chat",
+    "pages/ad/ad",
     "pages/mine/mine"
   ],
   "window": {
@@ -36,11 +43,26 @@
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/index/index", "text": "首页" },
-      { "pagePath": "pages/hall/hall", "text": "接单大厅" },
-      { "pagePath": "pages/sell/sell", "text": "卖闲置" },
-      { "pagePath": "pages/messages/messages", "text": "消息列表" },
-      { "pagePath": "pages/mine/mine", "text": "我的" }
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/hall/hall",
+        "text": "接单大厅"
+      },
+      {
+        "pagePath": "pages/sell/sell",
+        "text": "卖闲置"
+      },
+      {
+        "pagePath": "pages/messages/messages",
+        "text": "消息列表"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
     ]
   },
   "usingComponents": {
@@ -53,5 +75,17 @@
     "van-button": "@vant/weapp/button/index",
     "van-loading": "@vant/weapp/loading/index"
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于展示附近学校"
+    },
+    "scope.record": {
+      "desc": "用于发送语音消息"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
   "sitemapLocation": "sitemap.json"
 }

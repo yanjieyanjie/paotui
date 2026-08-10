@@ -10,13 +10,17 @@ datasource db {
 model User {
   id        Int       @id @default(autoincrement())
   nickname  String
-  avatar    String?
+  avatar    String?   @db.MediumText
+  major     String?
+  gender    String?
   phone     String?
+  isRunner  Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   orders          Order[]         @relation("CreatedOrders")
   acceptedOrders  Order[]         @relation("AcceptedOrders")
   messages        Message[]
+  sentMessages    Message[]       @relation("SentMessages")
 }
 
 model Order {
@@ -44,14 +48,18 @@ model Order {
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  orderId   Int?
-  order     Order?   @relation(fields: [orderId], references: [id])
-  content   String
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  fromUserId Int?
+  fromUser   User?    @relation("SentMessages", fields: [fromUserId], references: [id])
+  orderId    Int?
+  order      Order?   @relation(fields: [orderId], references: [id])
+  content    String   @db.MediumText
+  type       String   @default("text")
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
 
   @@index([userId])
+  @@index([fromUserId])
 }

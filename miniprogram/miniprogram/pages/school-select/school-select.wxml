@@ -1,0 +1,23 @@
+<view class="page">
+  <view class="search-bar">
+    <van-search value="{{keyword}}" placeholder="搜索学校" bind:change="onSearchInput" />
+  </view>
+
+  <view class="section">
+    <view class="section-title">当前学校</view>
+    <view class="school-item current">
+      <view class="school-name">{{currentSchool}}</view>
+      <text class="school-check">✓</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">其他学校</view>
+    <view class="school-item" wx:for="{{others}}" wx:key="name" data-name="{{item.name}}" bindtap="onSelect" hover-class="school-item-hover">
+      <text class="school-icon">{{item.icon}}</text>
+      <view class="school-name">{{item.name}}</view>
+      <text class="school-dist" wx:if="{{item.distanceText}}">{{item.distanceText}}</text>
+    </view>
+    <view class="empty" wx:if="{{others.length === 0}}">未找到相关学校</view>
+  </view>
+</view>

@@ -1,4 +1,4 @@
-import { cancelOrder, confirmOrder, doneOrder, getOrders, payOrder } from '../../services/orders';
+import { cancelOrder, confirmOrder, getOrders, payOrder } from '../../services/orders';
 import { decorateOrders } from '../../utils/format';
 import type { DisplayOrder } from '../../types';
 
@@ -60,16 +60,6 @@ Page({
     }
   },
 
-  async onDone(e: WechatMiniprogram.TouchEvent) {
-    const id = Number(e.currentTarget.dataset.id);
-    try {
-      await doneOrder(id);
-      wx.showToast({ title: '已标记完成，等待发布者确认', icon: 'success' });
-      this.loadOrders();
-    } catch (err) {
-      wx.showToast({ title: (err as Error).message || '操作失败', icon: 'none' });
-    }
-  },
 
   async onConfirm(e: WechatMiniprogram.TouchEvent) {
     const id = Number(e.currentTarget.dataset.id);

@@ -42,8 +42,11 @@ export class OrdersController {
   }
 
   @Patch(':id/accept')
-  accept(@Param('id', ParseIntPipe) id: number) {
-    return this.ordersService.accept(id);
+  accept(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('userId') userId?: number,
+  ) {
+    return this.ordersService.accept(id, userId);
   }
 
   @Patch(':id/done')

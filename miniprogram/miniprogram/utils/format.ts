@@ -15,6 +15,16 @@ export function formatTime(value: string): string {
   return `${date.getMonth() + 1}月${date.getDate()}日 ${hm}`;
 }
 
+export function formatDeadline(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+  date.setHours(date.getHours() + 3);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getMonth() + 1}月${date.getDate()}日 ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
 export function decorateOrder(order: Order): DisplayOrder {
   return {
     ...order,
@@ -22,6 +32,10 @@ export function decorateOrder(order: Order): DisplayOrder {
     statusLabel: ORDER_STATUS_LABELS[order.status] ?? order.status,
     tagColor: ORDER_TYPE_COLORS[order.type] ?? '#8a8a8a',
     timeText: formatTime(order.createdAt),
+    deadlineText: formatDeadline(order.createdAt),
+    avatarText: order.creator?.nickname?.charAt(0) ?? '?',
+    avatarUrl: order.creator?.avatar ?? '',
+    creatorName: order.creator?.nickname ?? '',
   };
 }
 

@@ -11,10 +11,39 @@ async function main() {
   await prisma.$executeRawUnsafe('ALTER TABLE `Order` AUTO_INCREMENT = 1');
   await prisma.$executeRawUnsafe('ALTER TABLE `Message` AUTO_INCREMENT = 1');
 
+  // 演示账号：ID 固定为 1（对应前端 DEMO_USER_ID / 后端 DEFAULT_USER_ID）
   const demo = await prisma.user.create({
     data: {
       nickname: '校园跑腿君',
       phone: '13800000000',
+      major: '计算机科学与技术',
+      gender: 'male',
+    },
+  });
+
+  // 其他学生用户，让接单大厅出现不同发布者
+  const zhangSan = await prisma.user.create({
+    data: {
+      nickname: '张三',
+      phone: '13811112222',
+      major: '软件工程',
+      gender: 'male',
+    },
+  });
+  const liSi = await prisma.user.create({
+    data: {
+      nickname: '李四',
+      phone: '13833334444',
+      major: '会计学',
+      gender: 'female',
+    },
+  });
+  const wangWu = await prisma.user.create({
+    data: {
+      nickname: '王五',
+      phone: '13855556666',
+      major: '机械工程',
+      gender: 'male',
     },
   });
 
@@ -27,6 +56,7 @@ async function main() {
       pickup: '菜鸟驿站（东门）',
       delivery: '3 号宿舍楼',
       status: 'OPEN',
+      creatorId: demo.id,
     },
     {
       title: '带一份二食堂黄焖鸡米饭',
@@ -37,6 +67,7 @@ async function main() {
       pickup: '二食堂',
       delivery: '图书馆二楼',
       status: 'OPEN',
+      creatorId: demo.id,
     },
     {
       title: '代买一瓶 1.5L 农夫山泉',
@@ -46,6 +77,7 @@ async function main() {
       pickup: '校门口超市',
       delivery: '操场看台',
       status: 'OPEN',
+      creatorId: zhangSan.id,
     },
     {
       title: '代取美团外卖',
@@ -56,6 +88,7 @@ async function main() {
       pickup: '校门口外卖架',
       delivery: '6 号宿舍楼',
       status: 'OPEN',
+      creatorId: liSi.id,
     },
     {
       title: '代取奶茶外卖（待支付示例）',
@@ -65,6 +98,7 @@ async function main() {
       pickup: '校门口奶茶店',
       delivery: '1 号宿舍楼',
       status: 'PAYMENT_PENDING',
+      creatorId: wangWu.id,
     },
     {
       title: '帮忙打印 20 页资料',
@@ -74,6 +108,7 @@ async function main() {
       pickup: '校内打印店',
       delivery: '教学楼 B102',
       status: 'OPEN',
+      creatorId: zhangSan.id,
     },
     {
       title: '带一杯一点点波霸奶茶',
@@ -83,6 +118,7 @@ async function main() {
       pickup: '一点点奶茶店',
       delivery: '宿舍区门口',
       status: 'OPEN',
+      creatorId: liSi.id,
     },
     {
       title: '代取顺丰快递（大件）',
@@ -92,6 +128,7 @@ async function main() {
       pickup: '顺丰站点',
       delivery: '8 号宿舍楼',
       status: 'ACCEPTED',
+      creatorId: demo.id,
       acceptedById: demo.id,
     },
     {
@@ -103,6 +140,7 @@ async function main() {
       pickup: '校医院旁药店',
       delivery: '2 号宿舍楼',
       status: 'ACCEPTED',
+      creatorId: wangWu.id,
       acceptedById: demo.id,
     },
     {
@@ -113,6 +151,7 @@ async function main() {
       pickup: '一食堂',
       delivery: '教学楼门口',
       status: 'DONE',
+      creatorId: zhangSan.id,
       acceptedById: demo.id,
     },
     {
@@ -123,6 +162,7 @@ async function main() {
       pickup: '东门快递柜',
       delivery: '4 号宿舍楼',
       status: 'DONE',
+      creatorId: demo.id,
       acceptedById: demo.id,
     },
     {
@@ -133,6 +173,7 @@ async function main() {
       pickup: '体育用品店',
       delivery: '体育馆前台',
       status: 'DONE',
+      creatorId: liSi.id,
       acceptedById: demo.id,
     },
     {
@@ -144,13 +185,55 @@ async function main() {
       pickup: '5 号宿舍楼 3 层',
       delivery: '校门口',
       status: 'CANCELLED',
+      creatorId: wangWu.id,
+    },
+    // 以下为其他用户新发布的订单，让接单大厅发布者更丰富
+    {
+      title: '代取京东快递',
+      description: '东门京东派送点，货号 J-2026，送到 7 号宿舍楼下',
+      type: 'EXPRESS',
+      reward: 5,
+      pickup: '东门京东派送点',
+      delivery: '7 号宿舍楼',
+      status: 'OPEN',
+      creatorId: zhangSan.id,
+    },
+    {
+      title: '带一份三食堂麻辣烫',
+      description: '微辣，不要香菜，送到图书馆一楼',
+      type: 'FOOD',
+      reward: 4,
+      pickup: '三食堂麻辣烫窗口',
+      delivery: '图书馆一楼',
+      status: 'OPEN',
+      creatorId: liSi.id,
+    },
+    {
+      title: '代买一提抽纸',
+      description: '维达 3 层抽纸一提，送到 3 号宿舍楼下',
+      type: 'SHOPPING',
+      reward: 3,
+      pickup: '校内超市',
+      delivery: '3 号宿舍楼下',
+      status: 'OPEN',
+      creatorId: wangWu.id,
+    },
+    {
+      title: '帮忙寄个快递',
+      description: '顺丰到付，文件袋已装好，送到顺丰站点并下单',
+      type: 'OTHER',
+      reward: 6,
+      pickup: '2 号宿舍楼 402',
+      delivery: '顺丰站点',
+      status: 'OPEN',
+      creatorId: zhangSan.id,
     },
   ];
 
   const orderIdByTitle = new Map<string, number>();
   for (const order of orders) {
     const created = await prisma.order.create({
-      data: { ...order, creatorId: demo.id },
+      data: order,
     });
     orderIdByTitle.set(created.title, created.id);
   }
@@ -204,7 +287,7 @@ async function main() {
   }
 
   console.log(
-    `Seed 完成：demo 用户 id=${demo.id}，订单 ${orders.length} 条，消息 ${messages.length} 条`,
+    `Seed 完成：用户 4 个（demo id=${demo.id}），订单 ${orders.length} 条，消息 ${messages.length} 条`,
   );
 }
 

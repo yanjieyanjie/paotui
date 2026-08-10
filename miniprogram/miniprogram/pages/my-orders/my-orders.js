@@ -54,17 +54,6 @@ Page({
             wx.showToast({ title: err.message || '取消失败', icon: 'none' });
         }
     },
-    async onDone(e) {
-        const id = Number(e.currentTarget.dataset.id);
-        try {
-            await (0, orders_1.doneOrder)(id);
-            wx.showToast({ title: '已标记完成，等待发布者确认', icon: 'success' });
-            this.loadOrders();
-        }
-        catch (err) {
-            wx.showToast({ title: err.message || '操作失败', icon: 'none' });
-        }
-    },
     async onConfirm(e) {
         const id = Number(e.currentTarget.dataset.id);
         try {

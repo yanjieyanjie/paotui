@@ -1,6 +1,11 @@
-import { acceptOrder, getOrders } from '../../services/orders';
+import { acceptOrder, cancelOrder, getOrders } from '../../services/orders';
 import { decorateOrders } from '../../utils/format';
+import { getCurrentUserId } from '../../utils/account';
+import { ensureRunnerIdentity } from '../../utils/identity';
 import type { DisplayOrder } from '../../types';
+
+const REFRESH_INTERVAL = 30000;
+let refreshTimer = 0;
 
 interface ServiceItem {
   key: number;
@@ -10,6 +15,7 @@ interface ServiceItem {
 }
 
 interface AdItem {
+  type: string;
   title: string;
   sub: string;
   icon: string;
@@ -17,39 +23,14 @@ interface AdItem {
 }
 
 interface HomeOrder extends DisplayOrder {
-  deadlineText: string;
-  rewardText: string;
-  statusColor: string;
-}
-
-const STATUS_COLORS: Record<string, string> = {
-  OPEN: '#2F9DE8',
-  ACCEPTED: '#FF9F43',
-  DONE: '#52C41A',
-  CANCELLED: '#8A97A5',
-};
-
-function formatDeadline(createdAt: string): string {
-  const date = new Date(createdAt);
-  if (Number.isNaN(date.getTime())) {
-    return '';
-  }
-  date.setHours(date.getHours() + 3);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${date.getMonth() + 1}月${date.getDate()}日 ${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
-
-function formatReward(reward: string): string {
-  const num = Number(reward);
-  return Number.isFinite(num) ? String(num) : reward;
+  showAccept: boolean;
+  showWithdraw: boolean;
 }
 
 Page({
   data: {
     statusBarHeight: 20,
-    schools: ['重庆工商职业学院', '重庆工商职业学院 · 合川校区'],
-    schoolIndex: 0,
-    schoolName: '重庆工商职业学院',
+    schoolName: '',
     services: [
       { key: 0, name: '快递代寄', icon: '📦', bg: '#E8F3FF' },
       { key: 1, name: '搬水', icon: '🛢️', bg: '#E6F7EE' },
@@ -63,9 +44,9 @@ Page({
       { key: 9, name: '投诉/建议', icon: '📮', bg: '#FFF7DE' },
     ] as ServiceItem[],
     ads: [
-      { title: '新用户下单立减3元', sub: '校园跑腿 · 首单福利', icon: '💰', cls: 'ad-1' },
-      { title: '学生自营 · 极速送达', sub: '骑手就近接单，平均30分钟', icon: '⚡', cls: 'ad-2' },
-      { title: '接单赚赏金', sub: '课余时间，随时随地接单', icon: '🎁', cls: 'ad-3' },
+      { type: 'runner', title: '招募接单员', sub: '课余时间 · 接单赚赏金', icon: '🚴', cls: 'ad-1' },
+      { type: 'driving', title: '学校附近最便宜驾校', sub: '学生团报 · 低价学车', icon: '🚗', cls: 'ad-2' },
+      { type: 'training', title: '最优质培训机构', sub: '名师小班 · 考证无忧', icon: '🎓', cls: 'ad-3' },
     ] as AdItem[],
     orders: [] as HomeOrder[],
     loading: true,
@@ -82,17 +63,35 @@ Page({
     if (tabBar) {
       tabBar.setData({ selected: 0 });
     }
+    this.setData({ schoolName: wx.getStorageSync('selectedSchool') || '重庆工商职业学院' });
     this.loadOrders();
+    if (!refreshTimer) {
+      refreshTimer = setInterval(() => this.loadOrders(), REFRESH_INTERVAL) as unknown as number;
+    }
+  },
+
+  onHide() {
+    if (refreshTimer) {
+      clearInterval(refreshTimer);
+      refreshTimer = 0;
+    }
+  },
+
+  onUnload() {
+    if (refreshTimer) {
+      clearInterval(refreshTimer);
+      refreshTimer = 0;
+    }
   },
 
   async loadOrders() {
     try {
       const res = await getOrders({ status: 'OPEN', page: 1, pageSize: 10 });
+      const currentUserId = getCurrentUserId();
       const orders = decorateOrders(res.items).map((item) => ({
         ...item,
-        deadlineText: formatDeadline(item.createdAt),
-        rewardText: formatReward(item.reward),
-        statusColor: STATUS_COLORS[item.status] ?? '#8A97A5',
+        showAccept: item.status === 'OPEN' && item.creatorId !== currentUserId,
+        showWithdraw: item.status === 'OPEN' && item.creatorId === currentUserId,
       }));
       this.setData({ orders, loading: false });
     } catch {
@@ -101,12 +100,24 @@ Page({
     }
   },
 
-  onSchoolChange(e: WechatMiniprogram.CustomEvent) {
-    const index = Number(e.detail.value);
-    this.setData({
-      schoolIndex: index,
-      schoolName: this.data.schools[index],
-    });
+  onPullDownRefresh() {
+    this.loadOrders();
+    wx.stopPullDownRefresh();
+  },
+
+  onSchoolTap() {
+    wx.navigateTo({ url: '/pages/school-select/school-select' });
+  },
+
+  onAdTap(e: WechatMiniprogram.TouchEvent) {
+    const { type } = e.currentTarget.dataset as { type: string };
+    if (type === 'runner') {
+      wx.navigateTo({ url: '/pages/runner-apply/runner-apply' });
+      return;
+    }
+    if (type === 'driving' || type === 'training') {
+      wx.navigateTo({ url: `/pages/ad/ad?type=${type}` });
+    }
   },
 
   onCardTap(e: WechatMiniprogram.TouchEvent) {
@@ -167,14 +178,56 @@ Page({
     wx.showToast({ title: `${name} · 敬请期待`, icon: 'none' });
   },
 
+  onOrderTap(e: WechatMiniprogram.TouchEvent) {
+    const { id } = e.currentTarget.dataset as { id: number };
+    wx.navigateTo({ url: `/pages/order-detail/order-detail?id=${id}` });
+  },
+
   async onAccept(e: WechatMiniprogram.TouchEvent) {
     const { id } = e.currentTarget.dataset as { id: number };
+    const canGrab = await ensureRunnerIdentity();
+    if (!canGrab) {
+      return;
+    }
+    const confirmed = await new Promise<boolean>((resolve) => {
+      wx.showModal({
+        title: '确认抢单',
+        content: '确定抢下这个订单吗？',
+        success: (res) => resolve(res.confirm),
+        fail: () => resolve(false),
+      });
+    });
+    if (!confirmed) {
+      return;
+    }
     try {
-      await acceptOrder(id);
-      wx.showToast({ title: '接单成功', icon: 'success' });
+      await acceptOrder(id, getCurrentUserId());
+      wx.showToast({ title: '抢单成功', icon: 'success' });
       this.loadOrders();
     } catch (err) {
-      wx.showToast({ title: (err as Error).message || '接单失败', icon: 'none' });
+      wx.showToast({ title: (err as Error).message || '抢单失败', icon: 'none' });
+    }
+  },
+
+  async onCancel(e: WechatMiniprogram.TouchEvent) {
+    const { id } = e.currentTarget.dataset as { id: number };
+    const confirmed = await new Promise<boolean>((resolve) => {
+      wx.showModal({
+        title: '撤回任务',
+        content: '确定撤回这个任务吗？撤回后任务将下架',
+        success: (res) => resolve(res.confirm),
+        fail: () => resolve(false),
+      });
+    });
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await cancelOrder(id);
+      wx.showToast({ title: '已撤回', icon: 'success' });
+      this.loadOrders();
+    } catch (err) {
+      wx.showToast({ title: (err as Error).message || '撤回失败', icon: 'none' });
     }
   },
 

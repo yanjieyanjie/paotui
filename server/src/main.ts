@@ -1,10 +1,12 @@
 import { ValidationPipe } from '@nestjs/common';
+import { json } from 'express';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bodyParser: false });
   app.setGlobalPrefix('api');
+  app.use(json({ limit: '5mb' }));
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   const port = Number(process.env.PORT) || 3000;

@@ -1,0 +1,70 @@
+<view class="page">
+  <view class="list-state" wx:if="{{loading}}">加载中...</view>
+
+  <block wx:if="{{!loading && order}}">
+    <!-- 顶部状态标题 -->
+    <view class="header">
+      <view class="stage-title">{{stageTitle}}</view>
+      <view class="stage-sub">{{stageSub}}</view>
+    </view>
+
+    <!-- 订单信息 -->
+    <view class="card info-card">
+      <view class="info-head">
+        <view class="user-info">
+          <image wx:if="{{order.avatarUrl}}" class="avatar" src="{{order.avatarUrl}}" mode="aspectFill" />
+          <view wx:if="{{!order.avatarUrl}}" class="avatar avatar-fallback">{{order.avatarText}}</view>
+          <view class="user-meta">
+            <view class="nickname">{{order.creatorName}}</view>
+            <view class="publish-time">发布时间 {{order.timeText}}</view>
+          </view>
+        </view>
+        <van-tag color="{{order.tagColor}}" plain>{{order.typeLabel}}</van-tag>
+      </view>
+
+      <view class="title">{{order.title}}</view>
+      <view class="desc" wx:if="{{order.description}}">{{order.description}}</view>
+
+      <view class="divider"></view>
+
+      <view class="info-row">
+        <text class="label">赏金</text>
+        <text class="value reward">¥{{order.reward}}</text>
+      </view>
+      <view class="info-row" wx:if="{{order.pickup}}">
+        <text class="label">取件地址</text>
+        <text class="value">{{order.pickup}}</text>
+      </view>
+      <view class="info-row" wx:if="{{order.delivery}}">
+        <text class="label">送达地址</text>
+        <text class="value">{{order.delivery}}</text>
+      </view>
+      <view class="info-row" wx:if="{{order.gender}}">
+        <text class="label">性别要求</text>
+        <text class="value">{{order.gender === 'male' ? '仅男生' : '仅女生'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">截止时间</text>
+        <text class="value">🕐 {{order.deadlineText}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">订单状态</text>
+        <text class="value">{{order.statusLabel}}</text>
+      </view>
+    </view>
+  </block>
+
+  <van-empty wx:if="{{!loading && !order}}" description="订单不存在或加载失败" />
+
+  <!-- 发布者提醒：骑手已提交完成 -->
+  <view class="reminder" wx:if="{{showReminder}}">
+    <van-icon name="info-o" size="32" color="#ff7a2f" />
+    <text>{{reminderText}}</text>
+  </view>
+
+  <!-- 底部操作按钮：按状态和角色显示 -->
+  <view class="footer" wx:if="{{actionText || contactLabel}}">
+    <button wx:if="{{contactLabel}}" class="contact-btn" hover-class="action-btn-hover" bindtap="onContact">💬 {{contactLabel}}</button>
+    <button wx:if="{{actionText}}" class="action-btn {{actionWarning ? 'action-btn-warning' : ''}} {{actionDanger ? 'action-btn-danger' : ''}}" hover-class="action-btn-hover" bindtap="onAction" disabled="{{actionDisabled || countdownExpired}}">{{actionText}}</button>
+  </view>
+</view>

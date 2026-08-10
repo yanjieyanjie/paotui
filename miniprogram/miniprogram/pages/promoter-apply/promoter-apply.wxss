@@ -1,0 +1,87 @@
+page {
+  background: #f7f8fa;
+}
+
+.page {
+  padding: 24rpx;
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.intro-icon {
+  font-size: 88rpx;
+}
+
+.intro-title {
+  margin-top: 16rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1f2329;
+}
+
+.intro-desc {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.form {
+  margin-top: 24rpx;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid #f2f3f5;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.form-picker {
+  flex: 1;
+}
+
+.form-picker-value {
+  font-size: 28rpx;
+  color: #1f2329;
+}
+
+.submit-btn {
+  margin-top: 48rpx;
+  background: linear-gradient(135deg, #07c160, #10b981);
+  color: #ffffff;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.submit-btn[disabled] {
+  opacity: 0.7;
+}

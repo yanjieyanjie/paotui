@@ -22,9 +22,10 @@
       <van-button size="mini" type="primary" data-id="{{item.id}}" bindtap="onPay">去支付</van-button>
     </view>
     <view class="order-actions" wx:if="{{item.status === 'ACCEPTED'}}">
-      <van-button size="mini" type="warning" data-id="{{item.id}}" bindtap="onDone">完成</van-button>
+      <van-button size="mini" type="success" data-id="{{item.id}}" bindtap="onConfirm">确认完成</van-button>
     </view>
     <view class="order-actions" wx:if="{{item.status === 'COMPLETION_PENDING'}}">
+      <text class="order-hint">骑手已提交完成，请确认</text>
       <van-button size="mini" type="success" data-id="{{item.id}}" bindtap="onConfirm">确认完成</van-button>
     </view>
   </view>

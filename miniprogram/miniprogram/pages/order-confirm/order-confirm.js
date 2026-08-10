@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const orders_1 = require("../../services/orders");
 const index_1 = require("../../types/index");
 const order_flow_1 = require("../../utils/order-flow");
-const config_1 = require("../../utils/config");
+const account_1 = require("../../utils/account");
 Page({
     data: {
         draft: null,
@@ -31,7 +31,7 @@ Page({
     },
     async createPendingOrder(draft) {
         try {
-            const order = await (0, orders_1.createOrder)({ ...draft, creatorId: config_1.DEMO_USER_ID });
+            const order = await (0, orders_1.createOrder)({ ...draft, creatorId: (0, account_1.getCurrentUserId)() });
             this.setData({ orderId: order.id });
         }
         catch {

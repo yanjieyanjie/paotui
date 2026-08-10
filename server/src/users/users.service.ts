@@ -1,9 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findAll() {
+    return this.prisma.user.findMany({
+      orderBy: { id: 'asc' },
+    });
+  }
 
   async getDemoUser() {
     const user = await this.prisma.user.findFirst({ orderBy: { id: 'asc' } });
@@ -82,5 +90,29 @@ export class UsersService {
         onTimeRate,
       },
     };
+  }
+
+  async update(id: number, dto: UpdateUserDto) {
+    await this.findOne(id);
+    const data: Prisma.UserUpdateInput = {};
+    if (dto.nickname !== undefined) {
+      data.nickname = dto.nickname;
+    }
+    if (dto.phone !== undefined) {
+      data.phone = dto.phone;
+    }
+    if (dto.major !== undefined) {
+      data.major = dto.major;
+    }
+    if (dto.gender !== undefined) {
+      data.gender = dto.gender;
+    }
+    if (dto.avatar !== undefined) {
+      data.avatar = dto.avatar;
+    }
+    if (dto.isRunner !== undefined) {
+      data.isRunner = dto.isRunner;
+    }
+    return this.prisma.user.update({ where: { id }, data });
   }
 }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOrders = getOrders;
+exports.getOrder = getOrder;
 exports.acceptOrder = acceptOrder;
 exports.doneOrder = doneOrder;
 exports.createOrder = createOrder;
@@ -11,8 +12,11 @@ const request_1 = require("./request");
 function getOrders(query = {}) {
     return (0, request_1.request)({ url: '/orders', data: query });
 }
-function acceptOrder(id) {
-    return (0, request_1.request)({ url: `/orders/${id}/accept`, method: 'PATCH' });
+function getOrder(id) {
+    return (0, request_1.request)({ url: `/orders/${id}` });
+}
+function acceptOrder(id, userId) {
+    return (0, request_1.request)({ url: `/orders/${id}/accept`, method: 'PATCH', data: { userId } });
 }
 function doneOrder(id) {
     return (0, request_1.request)({ url: `/orders/${id}/done`, method: 'PATCH' });
