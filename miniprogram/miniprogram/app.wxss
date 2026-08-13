@@ -1,18 +1,150 @@
 page {
-  background: linear-gradient(180deg, #d9f0ff 0%, #f2faff 45%, #ffffff 100%);
+  --brand: #29c7ec;
+  --brand-dark: #0fa6d2;
+  --lime: #dfff83;
+  --lime-strong: #b9f34d;
+  --ink: #111418;
+  --muted: #8b9097;
+  --line: #edf0f2;
+  --surface: #ffffff;
+  --page: #f5f6f7;
+  background: linear-gradient(180deg, #eaf9fa 0%, #f4fbfc 45%, #f5f6f7 100%);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 28rpx;
-  color: #333;
-  line-height: 1.5;
 }
 
-.card {
-  background: #fff;
-  border-radius: 32rpx;
-  box-shadow: 0 6rpx 24rpx rgba(90, 160, 220, 0.1);
+view, text, input, textarea, button, image, scroll-view {
+  box-sizing: border-box;
+}
+
+button::after {
+  border: none;
 }
 
 .page {
-  padding-bottom: 220rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0 24rpx 220rpx;
   padding-bottom: calc(220rpx + constant(safe-area-inset-bottom));
   padding-bottom: calc(220rpx + env(safe-area-inset-bottom));
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.page-with-tab {
+  min-height: 100vh;
+  padding-bottom: calc(132rpx + env(safe-area-inset-bottom));
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 28rpx;
+  box-shadow: 0 6rpx 20rpx rgba(34, 45, 54, .05);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: #f1f3f4;
+  color: #30343a;
+  font-size: 23rpx;
+}
+
+.pill.active {
+  color: #071216;
+  background: var(--brand);
+}
+
+.primary-button {
+  height: 96rpx;
+  border-radius: 20rpx;
+  background: #202224;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 96rpx;
+}
+
+.primary-button[disabled] {
+  background: #aeb2b6;
+  color: rgba(255,255,255,.8);
+}
+
+.empty-state {
+  padding: 120rpx 30rpx;
+  text-align: center;
+  color: #9ca1a7;
+}
+
+.empty-icon {
+  display: block;
+  margin-bottom: 24rpx;
+  font-size: 84rpx;
+  filter: grayscale(.2);
+}
+
+.hairline {
+  height: 1rpx;
+  background: #eef0f2;
+}
+
+.nav-bar {
+  height: 92rpx;
+  padding: 0 24rpx;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-back {
+  width: 62rpx;
+  height: 62rpx;
+  display: flex;
+  align-items: center;
+  font-size: 42rpx;
+}
+
+.nav-title {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.wechat-capsule {
+  margin-left: auto;
+  height: 56rpx;
+  min-width: 154rpx;
+  padding: 0 18rpx;
+  border-radius: 32rpx;
+  background: transparent;
+  border: 1rpx solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #202428;
+  font-size: 26rpx;
+  font-weight: 700;
+  visibility: hidden;
+}
+
+.wechat-capsule .capsule-line {
+  width: 1rpx;
+  height: 30rpx;
+  background: rgba(0, 0, 0, .14);
 }

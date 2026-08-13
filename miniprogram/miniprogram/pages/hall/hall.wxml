@@ -4,53 +4,34 @@
     <view class="tab {{tabIndex === index ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="*this" data-index="{{index}}" bindtap="onTabChange">{{item}}</view>
   </view>
 
-  <view class="card order-card" wx:for="{{orders}}" wx:key="id" data-id="{{item.id}}" bindtap="onCardTap" hover-class="order-card-hover">
-    <view class="order-head">
-      <view class="user-info">
-        <image wx:if="{{item.avatarUrl}}" class="user-avatar" src="{{item.avatarUrl}}" mode="aspectFill" />
-        <view wx:if="{{!item.avatarUrl}}" class="user-avatar">{{item.avatarText}}</view>
-        <text class="user-nickname">{{item.creatorName}}</text>
-      </view>
-      <van-tag color="{{item.tagColor}}" plain>{{item.typeLabel}}</van-tag>
-      <view class="deadline">
-        <van-icon name="clock-o" size="26" color="#999" />
-        <text class="deadline-text">截止 {{item.deadlineText}}</text>
-      </view>
-      <van-tag type="primary" plain>{{item.statusLabel}}</van-tag>
+    <view class="order-card" wx:for="{{orders}}" wx:key="id" data-id="{{item.id}}" bindtap="onCardTap" hover-class="order-card-hover">
+    <view class="task-head">
+      <image wx:if="{{item.avatarUrl}}" class="avatar" src="{{item.avatarUrl}}" mode="aspectFill" />
+      <view wx:if="{{!item.avatarUrl}}" class="avatar">{{item.avatarText}}</view>
+      <text class="service-tag service-{{item.type}}">{{item.typeLabel}}</text>
+      <text class="deadline">◷ {{item.deadlineText}}</text>
+      <text class="status status-{{item.status}}">{{item.statusLabel}}</text>
     </view>
-    <view class="order-body">
-      <view class="order-title">{{item.title}}</view>
-      <view class="order-desc" wx:if="{{item.description}}">{{item.description}}</view>
-      <view class="loc-row" wx:if="{{item.pickup}}">
-        <van-icon name="location-o" size="28" color="#999" />
-        <text>{{item.pickup}}</text>
-      </view>
-      <view class="loc-row" wx:if="{{item.delivery}}">
-        <van-icon name="flag-o" size="28" color="#999" />
-        <text>{{item.delivery}}</text>
-      </view>
+
+    <view class="task-copy">
+      <text wx:if="{{item.gender && item.gender !== '不限'}}" class="gender">{{item.gender}}</text>
+      <text wx:else class="gender unlimited">不限</text>
+      <text class="task-title">{{item.title}}</text>
+      <text wx:if="{{item.description}}" class="task-desc">{{item.description}}</text>
     </view>
-    <view class="order-foot">
-      <view class="reward">
-        <text class="reward-label">赏金</text>
-        <text class="order-price">¥{{item.reward}}</text>
-      </view>
-      <view class="publish-time">
-        <van-icon name="clock-o" size="24" color="#aaa" />
-        <text>发布时间 {{item.timeText}}</text>
-      </view>
+
+    <view wx:if="{{item.pickup || item.delivery}}" class="route">
+      <view wx:if="{{item.pickup}}" class="route-row"><text class="route-icon">📦</text><text>{{item.pickup}}</text></view>
+      <view wx:if="{{item.delivery}}" class="route-row"><text class="route-icon">🏁</text><text>{{item.delivery}}</text></view>
     </view>
-    <view class="order-actions" wx:if="{{item.showAccept}}">
-      <van-button size="small" type="primary" round block data-id="{{item.id}}" catchtap="onAccept">抢单</van-button>
-    </view>
-    <view class="order-actions" wx:if="{{item.showWithdraw}}">
-      <van-button size="small" type="danger" plain round block data-id="{{item.id}}" catchtap="onCancel">撤回任务</van-button>
-    </view>
-    <view class="order-actions" wx:if="{{item.status === 'ACCEPTED'}}">
-      <van-button size="small" type="warning" round block data-id="{{item.id}}" catchtap="onDone">确认完成</van-button>
-    </view>
-    <view class="order-actions" wx:if="{{item.status === 'COMPLETION_PENDING'}}">
-      <van-button size="small" round block disabled>等待确认</van-button>
+
+    <view class="task-foot">
+      <view class="reward"><text class="reward-mark">赏</text><text>¥{{item.reward}}</text></view>
+      <text class="created">{{item.timeText}}</text>
+      <button wx:if="{{item.showAccept}}" class="accept-button" data-id="{{item.id}}" catchtap="onAccept">抢单</button>
+      <button wx:if="{{item.showWithdraw}}" class="accept-button mine" data-id="{{item.id}}" catchtap="onCancel">撤回任务</button>
+      <button wx:if="{{item.status === 'ACCEPTED'}}" class="accept-button active-button" data-id="{{item.id}}" catchtap="onDone">确认完成</button>
+      <button wx:if="{{item.status === 'COMPLETION_PENDING'}}" class="accept-button disabled">等待确认</button>
     </view>
   </view>
 

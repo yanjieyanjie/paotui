@@ -30,10 +30,10 @@
     "pages/mine/mine"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#D9F0FF",
+    "navigationBarBackgroundColor": "#eaf9fa",
     "navigationBarTitleText": "爱工商校园服务平台",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#D9F0FF",
+    "backgroundColor": "#eaf9fa",
     "backgroundTextStyle": "light"
   },
   "tabBar": {

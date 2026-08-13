@@ -1,62 +1,67 @@
-<view class="page">
-  <view class="user-card">
-    <view class="avatar">
-      <image wx:if="{{user && user.avatar}}" class="avatar-img" src="{{user.avatar}}" mode="aspectFill" />
-      <text wx:else>{{avatarChar}}</text>
+<view class="profile-page page-with-tab">
+  <view class="profile-head safe-top">
+    <view class="nav-bar profile-nav">
+      <view class="head-dots">••</view>
+      <view class="wechat-capsule"><text>•••</text><view class="capsule-line"></view><text>◉</text></view>
     </view>
-    <view class="user-info" wx:if="{{user}}">
-      <view class="nickname">{{user.nickname}}</view>
-      <view class="phone">{{user.phone}}</view>
+
+    <view class="user-row" bindtap="onEditProfile">
+      <view class="profile-avatar">
+        <image wx:if="{{user && user.avatar}}" src="{{user.avatar}}" mode="aspectFill" class="avatar-img"></image>
+        <text wx:else>{{avatarChar}}</text>
+      </view>
+      <view class="user-copy">
+        <text class="hello">{{user.nickname || avatarChar}}</text>
+        <view class="user-id">ID: {{user.id || ''}}</view>
+        <text class="profile-summary">{{user.phone || user.major || '点击完善个人资料'}}</text>
+      </view>
+      <view class="edit-icon">✎</view>
     </view>
-    <van-loading wx:else size="24" color="#fff" />
-    <view class="edit-profile-btn" bindtap="onEditProfile">修改个人信息</view>
+
+    <view class="identity-row">
+      <text>身份：{{identityOptions[identityIndex].label}}</text>
+      <picker range="{{identityOptions}}" range-key="label" value="{{identityIndex}}" bindchange="onIdentityChange">
+        <button>♙ 切换身份 ⌄</button>
+      </picker>
+    </view>
   </view>
 
-  <view class="identity-card card">
-    <view class="identity-info">
-      <view class="identity-label">当前身份</view>
-      <view class="identity-value">{{identityOptions[identityIndex].label}}</view>
-    </view>
-    <picker range="{{identityOptions}}" range-key="label" value="{{identityIndex}}" bindchange="onIdentityChange">
-      <view class="identity-switch">
-        <text>切换身份</text>
-        <van-icon name="arrow-down" size="28" color="#07c160" />
+  <view class="profile-body">
+    <view class="stat-card card">
+      <view wx:for="{{publisherWallet}}" wx:key="key">
+        <text>{{item.value}}</text>
+        <text>{{item.label}}</text>
       </view>
-    </picker>
-  </view>
+    </view>
 
-  <view class="wallet-card card" wx:if="{{identityIndex === 0}}">
-    <view class="wallet-item" wx:for="{{publisherWallet}}" wx:key="key">
-      <view class="wallet-num">{{item.value}}</view>
-      <view class="wallet-label">{{item.label}}</view>
-    </view>
-  </view>
-  <view class="wallet-card card" wx:else>
-    <view class="wallet-item" wx:for="{{runnerWallet}}" wx:key="key">
-      <view class="wallet-num">{{item.value}}</view>
-      <view class="wallet-label">{{item.label}}</view>
-    </view>
-  </view>
-  <view class="order-grid-card">
-    <view class="order-grid-title">我的订单</view>
-    <view class="order-grid">
-      <view class="order-item" wx:for="{{orderTabs}}" wx:key="key" data-tab="{{item.tab}}" bindtap="onOrderTabTap">
-        <view class="order-icon" style="background: {{item.bg}};">{{item.icon}}</view>
-        <view class="order-name">{{item.name}}</view>
+    <view class="orders-card card">
+      <text class="card-title">我的订单</text>
+      <view class="order-entry-row">
+        <view class="order-entry" wx:for="{{orderTabs}}" wx:key="key" data-tab="{{item.tab}}" bindtap="onOrderTabTap">
+          <view class="order-icon">{{item.icon}}</view>
+          <text>{{item.name}}</text>
+        </view>
       </view>
     </view>
-    <view class="apply-row" wx:if="{{identityIndex === 0}}">
-      <view class="apply-btn apply-runner" data-page="runner" bindtap="onApplyTap">成为接单员</view>
-      <view class="apply-btn apply-promoter" data-page="promoter" bindtap="onApplyTap">成为推广员</view>
-    </view>
-  </view>
-  <view class="menu-group">
-    <view class="menu-item" wx:for="{{menus}}" wx:key="title" data-title="{{item.title}}" bindtap="onMenuTap">
-      <view class="menu-left">
-        <van-icon name="{{item.icon}}" size="36" color="#07c160" />
-        <text class="menu-title">{{item.title}}</text>
+
+    <view class="promo-row" wx:if="{{identityIndex === 0}}">
+      <view class="promo-card runner-card" data-page="runner" bindtap="onApplyTap">
+        <view><text>成为接单员</text><text>去申请 ›</text></view><text class="promo-art">💰</text>
       </view>
-      <van-icon name="arrow" size="28" color="#ccc" />
+      <view class="promo-card promoter-card" data-page="promoter" bindtap="onApplyTap">
+        <view><text>成为推广员</text><text>去申请 ›</text></view><text class="promo-art">📣</text>
+      </view>
     </view>
+
+    <view class="menu-card card">
+      <text class="card-title">我的服务</text>
+      <view class="menu-row" wx:for="{{menus}}" wx:key="title" data-title="{{item.title}}" bindtap="onMenuTap">
+        <view class="menu-icon"><van-icon name="{{item.icon}}" size="26" color="#7ca535" /></view>
+        <text>{{item.title}}</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="version">校园跑腿 · v0.1.0</view>
   </view>
 </view>

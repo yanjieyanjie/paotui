@@ -8,6 +8,14 @@
   </view>
 
   <view class="brand" bindtap="goHall">
+    <view class="hero-art">
+      <view class="sun"></view>
+      <view class="cloud cloud-a">☁️</view>
+      <view class="cloud cloud-b">☁️</view>
+      <view class="rider">🛵</view>
+      <view class="runner">🏃</view>
+    </view>
+    <view class="brand-eyebrow">CAMPUS GO · 校园互助</view>
     <view class="brand-line1">爱工商</view>
     <view class="brand-line2">校园服务平台</view>
   </view>
@@ -17,23 +25,29 @@
     <text class="notice-text">男寝如需送上楼，请记得备注哦~</text>
   </view>
 
-  <view class="quick-row">
-    <view class="quick-btn" data-type="express" bindtap="onCardTap">
-      <view class="quick-icon icon-blue">📦</view>
-      <view class="quick-name">快递代取</view>
-      <view class="quick-arrow">›</view>
+    <view class="service-panel card">
+    <view class="feature-row">
+      <view class="feature-card" style="background: #a9eddf;" data-type="express" bindtap="onCardTap">
+        <view>
+          <text class="feature-name">快递代取</text>
+          <text class="feature-action">去下单 ›</text>
+        </view>
+        <text class="feature-icon">📦</text>
+      </view>
+      <view class="feature-card" style="background: #ffd47d;" data-type="food" bindtap="onCardTap">
+        <view>
+          <text class="feature-name">代拿外卖</text>
+          <text class="feature-action">去下单 ›</text>
+        </view>
+        <text class="feature-icon">🍔</text>
+      </view>
     </view>
-    <view class="quick-btn" data-type="food" bindtap="onCardTap">
-      <view class="quick-icon icon-orange">🧤</view>
-      <view class="quick-name">代拿外卖</view>
-      <view class="quick-arrow">›</view>
-    </view>
-  </view>
 
-  <view class="func-grid">
-    <view class="func-item" wx:for="{{services}}" wx:key="key" data-name="{{item.name}}" bindtap="onServiceTap">
-      <view class="func-icon" style="background: {{item.bg}};">{{item.icon}}</view>
-      <view class="func-name">{{item.name}}</view>
+    <view class="service-grid">
+      <view class="service-cell" wx:for="{{services}}" wx:key="key" data-name="{{item.name}}" bindtap="onServiceTap">
+        <view class="service-icon" style="background: {{item.bg}}">{{item.icon}}</view>
+        <text>{{item.name}}</text>
+      </view>
     </view>
   </view>
 
@@ -57,47 +71,32 @@
     <view class="list-state" wx:if="{{loading}}">加载中...</view>
   <view class="list-state" wx:if="{{!loading && orders.length === 0}}">暂无订单，去发布一个吧</view>
 
-  <view class="order-card" wx:for="{{orders}}" wx:key="id" data-id="{{item.id}}" bindtap="onOrderTap" hover-class="order-card-hover">
-    <view class="order-head">
-      <view class="user-info">
-        <image wx:if="{{item.avatarUrl}}" class="user-avatar" src="{{item.avatarUrl}}" mode="aspectFill" />
-        <view wx:if="{{!item.avatarUrl}}" class="user-avatar">{{item.avatarText}}</view>
-        <text class="user-nickname">{{item.creatorName}}</text>
-      </view>
-      <van-tag color="{{item.tagColor}}" plain>{{item.typeLabel}}</van-tag>
-      <view class="deadline">
-        <van-icon name="clock-o" size="26" color="#999" />
-        <text class="deadline-text">截止 {{item.deadlineText}}</text>
-      </view>
-      <van-tag type="primary" plain>{{item.statusLabel}}</van-tag>
+    <view class="order-card" wx:for="{{orders}}" wx:key="id" data-id="{{item.id}}" bindtap="onOrderTap" hover-class="order-card-hover">
+    <view class="task-head">
+      <image wx:if="{{item.avatarUrl}}" class="avatar" src="{{item.avatarUrl}}" mode="aspectFill" />
+      <view wx:if="{{!item.avatarUrl}}" class="avatar">{{item.avatarText}}</view>
+      <text class="service-tag service-{{item.type}}">{{item.typeLabel}}</text>
+      <text class="deadline">◷ {{item.deadlineText}}</text>
+      <text class="status status-{{item.status}}">{{item.statusLabel}}</text>
     </view>
-    <view class="order-body">
-      <view class="order-item-title">{{item.title}}</view>
-      <view class="order-desc" wx:if="{{item.description}}">{{item.description}}</view>
-      <view class="loc-row" wx:if="{{item.pickup}}">
-        <van-icon name="location-o" size="28" color="#999" />
-        <text>{{item.pickup}}</text>
-      </view>
-      <view class="loc-row" wx:if="{{item.delivery}}">
-        <van-icon name="flag-o" size="28" color="#999" />
-        <text>{{item.delivery}}</text>
-      </view>
+
+    <view class="task-copy">
+      <text wx:if="{{item.gender && item.gender !== '不限'}}" class="gender">{{item.gender}}</text>
+      <text wx:else class="gender unlimited">不限</text>
+      <text class="task-title">{{item.title}}</text>
+      <text wx:if="{{item.description}}" class="task-desc">{{item.description}}</text>
     </view>
-    <view class="order-foot">
-      <view class="reward">
-        <text class="reward-label">赏金</text>
-        <text class="order-price">¥{{item.reward}}</text>
-      </view>
-      <view class="publish-time">
-        <van-icon name="clock-o" size="24" color="#aaa" />
-        <text>发布时间 {{item.timeText}}</text>
-      </view>
+
+    <view wx:if="{{item.pickup || item.delivery}}" class="route">
+      <view wx:if="{{item.pickup}}" class="route-row"><text class="route-icon">📦</text><text>{{item.pickup}}</text></view>
+      <view wx:if="{{item.delivery}}" class="route-row"><text class="route-icon">🏁</text><text>{{item.delivery}}</text></view>
     </view>
-    <view class="order-actions" wx:if="{{item.showAccept}}">
-      <van-button size="small" type="primary" round block data-id="{{item.id}}" catchtap="onAccept">抢单</van-button>
-    </view>
-    <view class="order-actions" wx:if="{{item.showWithdraw}}">
-      <van-button size="small" type="danger" plain round block data-id="{{item.id}}" catchtap="onCancel">撤回任务</van-button>
+
+    <view class="task-foot">
+      <view class="reward"><text class="reward-mark">赏</text><text>¥{{item.reward}}</text></view>
+      <text class="created">{{item.timeText}}</text>
+      <button wx:if="{{item.showAccept}}" class="accept-button" data-id="{{item.id}}" catchtap="onAccept">抢单</button>
+      <button wx:if="{{item.showWithdraw}}" class="accept-button mine" data-id="{{item.id}}" catchtap="onCancel">撤回任务</button>
     </view>
   </view>
 </view>

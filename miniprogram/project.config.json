@@ -1,7 +1,7 @@
 {
   "description": "校园跑腿微信小程序",
   "projectname": "campus-errand",
-  "appid": "wx8934e3ba62c4c5b5",
+  "appid": "wx893b51f69d6ff652",
   "compileType": "miniprogram",
   "miniprogramRoot": "miniprogram/",
   "libVersion": "3.0.0",
